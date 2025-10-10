@@ -13,3 +13,52 @@
  *= require_tree .
  *= require_self
  */
+
+/* Custom styles for Milestone 0 UI polish */
+
+body {
+	padding-bottom: 3rem;
+	background: #f8f9fa; /* light gray */
+	color: #212529;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.container h1 {
+	margin-bottom: 1rem;
+}
+
+.card-listing {
+	margin-bottom: 1rem;
+}
+
+.listing-card .card-title {
+	font-size: 1.1rem;
+	font-weight: 600;
+}
+
+.listing-meta {
+	font-size: 0.9rem;
+	color: #6c757d;
+}
+
+.table-listings th, .table-listings td {
+	vertical-align: middle;
+}
+
+.form-error {
+	color: #842029;
+	background-color: #f8d7da;
+	border: 1px solid #f5c2c7;
+	padding: .75rem 1rem;
+	border-radius: .25rem;
+	margin-bottom: 1rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 575.98px) {
+	.table-responsive-stack td, .table-responsive-stack th {
+		display: block;
+		width: 100%;
+	}
+}
+

@@ -1,8 +1,7 @@
-<%= form_with(model: user) do |form| %>
+<%= form_with(model: user, local: true) do |form| %>
   <% if user.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
+    <div class="form-error">
+      <h5><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h5>
       <ul>
         <% user.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -11,17 +10,18 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="mb-3">
+    <%= form.label :name, class: 'form-label' %>
+    <%= form.text_field :name, class: 'form-control' %>
   </div>
 
-  <div>
-    <%= form.label :email, style: "display: block" %>
-    <%= form.text_field :email %>
+  <div class="mb-3">
+    <%= form.label :email, class: 'form-label' %>
+    <%= form.email_field :email, class: 'form-control' %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="d-flex gap-2">
+    <%= form.submit class: 'btn btn-primary' %>
+    <%= link_to 'Cancel', users_path, class: 'btn btn-outline-secondary' %>
   </div>
 <% end %>

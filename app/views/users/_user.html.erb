@@ -1,12 +1,6 @@
-<div id="<%= dom_id user %>">
-  <p>
-    <strong>Name:</strong>
-    <%= user.name %>
-  </p>
-
-  <p>
-    <strong>Email:</strong>
-    <%= user.email %>
-  </p>
-
+<div id="<%= dom_id user %>" class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title"><%= user.name %></h5>
+    <p class="card-text"><%= mail_to user.email %></p>
+  </div>
 </div>
