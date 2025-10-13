@@ -28,6 +28,7 @@ class ListingsController < ApplicationController
         format.html { redirect_to @listing, notice: "Listing was successfully created." }
         format.json { render :show, status: :created, location: @listing }
       else
+        Rails.logger.error "Listing create failed: #{ @listing.errors.full_messages.join(', ') }"
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @listing.errors, status: :unprocessable_entity }
       end
@@ -41,6 +42,7 @@ class ListingsController < ApplicationController
         format.html { redirect_to @listing, notice: "Listing was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @listing }
       else
+        Rails.logger.error "Listing update failed: #{ @listing.errors.full_messages.join(', ') }"
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @listing.errors, status: :unprocessable_entity }
       end
