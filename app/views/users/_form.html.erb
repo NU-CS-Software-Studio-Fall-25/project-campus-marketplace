@@ -21,7 +21,8 @@
   </div>
 
   <div class="d-flex gap-2">
-    <%= form.submit class: 'btn btn-primary' %>
-    <%= link_to 'Cancel', users_path, class: 'btn btn-outline-secondary' %>
+    <%# Use explicit text matching tests for create/update buttons %>
+    <%= form.submit user.persisted? ? 'Update User' : 'Create User', class: 'btn btn-primary' %>
+    <%= link_to 'Back', users_path, class: 'btn btn-outline-secondary' %>
   </div>
 <% end %>

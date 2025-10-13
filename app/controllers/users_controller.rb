@@ -28,6 +28,7 @@ class UsersController < ApplicationController
         format.html { redirect_to @user, notice: "User was successfully created." }
         format.json { render :show, status: :created, location: @user }
       else
+        Rails.logger.error "User create failed: #{ @user.errors.full_messages.join(', ') }"
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
@@ -41,6 +42,7 @@ class UsersController < ApplicationController
         format.html { redirect_to @user, notice: "User was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @user }
       else
+        Rails.logger.error "User update failed: #{ @user.errors.full_messages.join(', ') }"
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
