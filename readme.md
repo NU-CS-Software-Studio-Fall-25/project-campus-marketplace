@@ -22,5 +22,3 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
-
-Website: https://damp-mesa-16164-557e0b4a96e1.herokuapp.com/
