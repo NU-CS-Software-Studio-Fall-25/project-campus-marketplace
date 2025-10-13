@@ -1,0 +1,11 @@
+<% content_for :title, "New listing" %>
+
+<div class="card">
+  <div class="card-body">
+    <h1 class="card-title">New listing</h1>
+    <%= render "form", listing: @listing %>
+    <div class="mt-3">
+      <%= link_to 'Back to listings', listings_path, class: 'btn btn-link' %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<%= form_with(model: user, local: true) do |form| %>
+  <% if user.errors.any? %>
+    <div class="form-error">
+      <h5><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h5>
+      <ul>
+        <% user.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :name, class: 'form-label' %>
+    <%= form.text_field :name, class: 'form-control' %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :email, class: 'form-label' %>
+    <%= form.email_field :email, class: 'form-control' %>
+  </div>
+
+  <div class="d-flex gap-2">
+    <%= form.submit class: 'btn btn-primary' %>
+    <%= link_to 'Cancel', users_path, class: 'btn btn-outline-secondary' %>
+  </div>
+<% end %>

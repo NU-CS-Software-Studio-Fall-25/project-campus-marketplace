@@ -1,0 +1,37 @@
+<%= form_with(model: listing, local: true, html: { class: 'needs-validation' }) do |form| %>
+  <% if listing.errors.any? %>
+    <div class="form-error">
+      <h5><%= pluralize(listing.errors.count, "error") %> prohibited this listing from being saved:</h5>
+      <ul>
+        <% listing.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :title, class: 'form-label' %>
+    <%= form.text_field :title, class: 'form-control' %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :description, class: 'form-label' %>
+    <%= form.text_area :description, class: 'form-control', rows: 4 %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :price, class: 'form-label' %>
+    <%= form.number_field :price, class: 'form-control', step: '0.01' %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :user_id, class: 'form-label' %>
+    <%= form.number_field :user_id, class: 'form-control' %>
+  </div>
+
+  <div class="d-flex gap-2">
+    <%= form.submit class: 'btn btn-primary' %>
+    <%= link_to 'Cancel', listings_path, class: 'btn btn-outline-secondary' %>
+  </div>
+<% end %>
