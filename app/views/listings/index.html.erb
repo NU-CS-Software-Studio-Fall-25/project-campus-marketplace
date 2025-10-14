@@ -5,31 +5,8 @@
   <%= link_to 'New listing', new_listing_path, class: 'btn btn-success' %>
 </div>
 
-<div class="table-responsive">
-  <table class="table table-striped table-hover table-listings">
-    <thead class="table-primary">
-      <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Price</th>
-        <th>User ID</th>
-        <th class="text-end">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @listings.each do |listing| %>
-        <tr>
-          <td><%= listing.title %></td>
-          <td><%= truncate(listing.description, length: 80) %></td>
-          <td><%= number_to_currency(listing.price || 0) %></td>
-          <td><%= listing.user_id %></td>
-          <td class="text-end">
-            <%= link_to 'Show', listing, class: 'btn btn-sm btn-primary me-1' %>
-            <%= link_to 'Edit this listing', edit_listing_path(listing), class: 'btn btn-sm btn-secondary me-1' %>
-            <%= link_to 'Destroy this listing', listing, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+<div class="listings-grid">
+  <% @listings.each do |listing| %>
+    <%= render partial: 'listing', locals: { listing: listing } %>
+  <% end %>
 </div>
