@@ -62,3 +62,72 @@ body {
 	}
 }
 
+/* Marketplace-style card grid */
+.listings-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	gap: 1rem;
+}
+
+.listing-card {
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.listing-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.placeholder-img {
+	width: 72px;
+	height: 72px;
+	object-fit: contain;
+	opacity: 0.85;
+}
+
+.placeholder-svg {
+	width: 72px;
+	height: 72px;
+	display: block;
+}
+
+.listing-image {
+	background: #f1f3f5;
+	height: 160px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+
+.listing-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.placeholder-img {
+	width: 72px;
+	height: 72px;
+	object-fit: contain;
+	opacity: 0.85;
+}
+
+.listing-price {
+	font-weight: 700;
+	font-size: 1rem;
+}
+
+.listing-description { color: #495057; margin-bottom: .5rem; }
+
+@media (max-width: 768px) {
+	.listing-image { height: 140px; }
+}
+
+
