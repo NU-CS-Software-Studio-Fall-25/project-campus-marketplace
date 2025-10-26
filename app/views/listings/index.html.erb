@@ -25,8 +25,8 @@
           <td><%= listing.user_id %></td>
           <td class="text-end">
             <%= link_to 'Show', listing, class: 'btn btn-sm btn-primary me-1' %>
-            <%= link_to 'Edit this listing', edit_listing_path(listing), class: 'btn btn-sm btn-secondary me-1' %>
-            <%= link_to 'Destroy this listing', listing, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' %>
+            <%= link_to 'Edit', edit_listing_path(listing), class: 'btn btn-sm btn-secondary me-1' %>
+            <%= link_to 'Delete', listing, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' %>
           </td>
         </tr>
       <% end %>
