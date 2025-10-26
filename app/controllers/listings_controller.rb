@@ -1,9 +1,15 @@
 class ListingsController < ApplicationController
-  before_action :set_listing, only: %i[ show edit update destroy ]
+  before_action :set_listing, only: :show
+  before_action :set_owned_listing, only: %i[ edit update destroy ]
 
   # GET /listings or /listings.json
   def index
-    @listings = Listing.all
+    @listings = Listing.includes(:user).order(created_at: :desc)
+  end
+
+  # GET /listings/mine
+  def mine
+    @listings = Current.user.listings.order(created_at: :desc)
   end
 
   # GET /listings/1 or /listings/1.json
@@ -12,7 +18,7 @@ class ListingsController < ApplicationController
 
   # GET /listings/new
   def new
-    @listing = Listing.new
+    @listing = Current.user.listings.build
   end
 
   # GET /listings/1/edit
@@ -21,7 +27,7 @@ class ListingsController < ApplicationController
 
   # POST /listings or /listings.json
   def create
-    @listing = Listing.new(listing_params)
+    @listing = Current.user.listings.build(listing_params)
 
     respond_to do |format|
       if @listing.save
@@ -54,7 +60,7 @@ class ListingsController < ApplicationController
     @listing.destroy!
 
     respond_to do |format|
-      format.html { redirect_to listings_path, notice: "Listing was successfully destroyed.", status: :see_other }
+      format.html { redirect_to mine_listings_path, notice: "Listing was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
     end
   end
@@ -62,11 +68,15 @@ class ListingsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_listing
-      @listing = Listing.find(params[:id])
+      @listing = Listing.includes(:user).find(params[:id])
+    end
+
+    def set_owned_listing
+      @listing = Current.user.listings.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def listing_params
-      params.require(:listing).permit(:title, :description, :price, :user_id)
+      params.require(:listing).permit(:title, :description, :price)
     end
 end

@@ -1,0 +1,52 @@
+<% content_for :title, "My Profile" %>
+
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h1 class="card-title h3 mb-3">Account Details</h1>
+        <% if @user.errors[:phone_number].any? %>
+          <div class="alert alert-danger">
+            <%= @user.errors[:phone_number].to_sentence %>
+          </div>
+        <% end %>
+        <dl class="row mb-0">
+          <dt class="col-sm-4">Email</dt>
+          <dd class="col-sm-8"><%= @user.email_address %></dd>
+          <dt class="col-sm-4">Username</dt>
+          <dd class="col-sm-8"><%= @user.username %></dd>
+          <dt class="col-sm-4">Member since</dt>
+          <dd class="col-sm-8"><%= @user.created_at.strftime("%B %d, %Y") %></dd>
+          <dt class="col-sm-4">Listings posted</dt>
+          <dd class="col-sm-8"><%= @listing_count %></dd>
+          <dt class="col-sm-4">Phone number</dt>
+          <dd class="col-sm-8">
+            <%= @user.phone_number.presence || content_tag(:span, "Not added yet", class: "text-muted") %>
+          </dd>
+        </dl>
+        <hr>
+        <h2 class="card-title h5 mb-3">Update phone number</h2>
+        <%= form_with model: @user, url: profile_path, method: :patch, local: true do |form| %>
+          <div class="mb-2">
+            <%= form.label :phone_number, class: "form-label" %>
+            <%= form.telephone_field :phone_number, class: "form-control", value: @user.phone_number, placeholder: "e.g. 8475550101" %>
+            <div class="form-text">Optional. Include digits only; add +country code if outside the U.S.</div>
+          </div>
+          <%= form.submit(@user.phone_number.present? ? "Save phone number" : "Add phone number", class: "btn btn-primary btn-sm") %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h2 class="card-title h4 mb-3">Quick Links</h2>
+        <div class="d-grid gap-2">
+          <%= link_to 'View all listings', listings_path, class: 'btn btn-outline-primary' %>
+          <%= link_to 'Manage my listings', mine_listings_path, class: 'btn btn-outline-secondary' %>
+          <%= link_to 'Create a new listing', new_listing_path, class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

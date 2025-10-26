@@ -25,11 +25,6 @@
     <%= form.number_field :price, class: 'form-control', step: '0.01' %>
   </div>
 
-  <div class="mb-3">
-    <%= form.label :user_id, class: 'form-label' %>
-    <%= form.number_field :user_id, class: 'form-control' %>
-  </div>
-
   <div class="d-flex gap-2">
     <%= form.submit listing.persisted? ? 'Update Listing' : 'Create Listing', class: 'btn btn-primary' %>
     <%= link_to 'Back', listings_path, class: 'btn btn-outline-secondary' %>

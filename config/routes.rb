@@ -1,6 +1,13 @@
 Rails.application.routes.draw do
-  resources :listings
-  resources :users
+  resource :session, only: %i[new create destroy]
+  resources :passwords, param: :token, only: %i[new create edit update]
+  resources :listings do
+    collection do
+      get :mine
+    end
+  end
+  resource :profile, only: %i[show update]
+  resources :users, only: %i[new create]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -14,6 +21,4 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   root "listings#index"
-  resources :listings
-  resources :users
 end

@@ -20,13 +20,9 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 
-# development:
-#   <<: *default
-#   database: marketplace_app_development
-
 development:
-  url: <%= ENV["DATABASE_URL"] %>
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+  <<: *default
+  database: marketplace_app_development
 
 
   # The specified database role being used to connect to PostgreSQL.

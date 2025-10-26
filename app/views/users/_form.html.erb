@@ -1,8 +1,8 @@
 <%= form_with(model: user, local: true) do |form| %>
   <% if user.errors.any? %>
-    <div class="form-error">
-      <h5><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h5>
-      <ul>
+    <div class="alert alert-danger">
+      <h5 class="mb-2"><%= pluralize(user.errors.count, "error") %> prevented your account from being created:</h5>
+      <ul class="mb-0">
         <% user.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
@@ -11,18 +11,32 @@
   <% end %>
 
   <div class="mb-3">
-    <%= form.label :name, class: 'form-label' %>
-    <%= form.text_field :name, class: 'form-control' %>
+    <%= form.label :email_address, "Northwestern email", class: "form-label" %>
+    <%= form.email_field :email_address, class: "form-control", required: true, placeholder: "abc@u.northwestern.edu" %>
+    <div class="form-text">Use your @u.northwestern.edu email address.</div>
   </div>
 
   <div class="mb-3">
-    <%= form.label :email, class: 'form-label' %>
-    <%= form.email_field :email, class: 'form-control' %>
+    <%= form.label :username, class: "form-label" %>
+    <%= form.text_field :username, class: "form-control", required: true, placeholder: "wildcat123" %>
   </div>
 
-  <div class="d-flex gap-2">
-    <%# Use explicit text matching tests for create/update buttons %>
-    <%= form.submit user.persisted? ? 'Update User' : 'Create User', class: 'btn btn-primary' %>
-    <%= link_to 'Back', users_path, class: 'btn btn-outline-secondary' %>
+  <div class="mb-3">
+    <%= form.label :phone_number, "Phone number (optional)", class: "form-label" %>
+    <%= form.telephone_field :phone_number, class: "form-control", placeholder: "e.g. 8475550101" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :password, class: "form-label" %>
+    <%= form.password_field :password, class: "form-control", required: true, autocomplete: "new-password" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :password_confirmation, class: "form-label" %>
+    <%= form.password_field :password_confirmation, class: "form-control", required: true, autocomplete: "new-password" %>
+  </div>
+
+  <div class="d-grid gap-2">
+    <%= form.submit "Create Account", class: "btn btn-primary" %>
   </div>
 <% end %>
