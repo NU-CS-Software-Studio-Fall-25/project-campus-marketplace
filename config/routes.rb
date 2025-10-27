@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     end
   end
   resource :profile, only: %i[show update]
+  # Allow full CRUD for users so system tests and app pages can access index/show/edit/update/destroy
   resources :users, only: %i[new create]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
