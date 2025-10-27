@@ -40,7 +40,7 @@
     </div>
     <% if listing.user == current_user %>
       <div>
-        <%= link_to 'Delete', listing, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-outline-danger' %>
+        <%= link_to 'Delete', listing, method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn-sm btn-outline-danger' %>
       </div>
     <% end %>
   </div>
