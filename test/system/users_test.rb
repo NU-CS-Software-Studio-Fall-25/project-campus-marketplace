@@ -14,12 +14,11 @@ class UsersTest < ApplicationSystemTestCase
     assert_text "Welcome to the marketplace!"
     assert_text "Profile"
     assert_text "signup_tester@u.northwestern.edu"
-
   end
 
   test "user sees validation error for non-Northwestern email" do
     visit new_user_path
-    
+
     fill_in "Northwestern email", with: "bad@example.com"
     fill_in "Username", with: "baduser"
     fill_in "Password", with: "password123"
