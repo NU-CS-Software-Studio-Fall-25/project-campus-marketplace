@@ -1,43 +1,31 @@
 require "application_system_test_case"
 
 class UsersTest < ApplicationSystemTestCase
-  setup do
-    @user = users(:one)
+  test "user signs up successfully" do
+    visit new_user_path
+
+    fill_in "Northwestern email", with: "signup_tester@u.northwestern.edu"
+    fill_in "Username", with: "signup_tester"
+    fill_in "Phone number (optional)", with: "8475550202"
+    fill_in "Password", with: "password123"
+    fill_in "Password confirmation", with: "password123"
+    click_button "Create Account"
+
+    assert_text "Welcome to the marketplace!"
+    assert_text "Profile"
+    assert_text "signup_tester@u.northwestern.edu"
+
   end
 
-  test "visiting the index" do
-    visit users_url
-    assert_selector "h1", text: "Users"
-  end
+  test "user sees validation error for non-Northwestern email" do
+    visit new_user_path
+    
+    fill_in "Northwestern email", with: "bad@example.com"
+    fill_in "Username", with: "baduser"
+    fill_in "Password", with: "password123"
+    fill_in "Password confirmation", with: "password123"
+    click_button "Create Account"
 
-  test "should create user" do
-    visit users_url
-    click_on "New user"
-
-    fill_in "Email", with: @user.email
-    fill_in "Name", with: @user.name
-    click_on "Create User"
-
-    assert_text "User was successfully created"
-    click_on "Back"
-  end
-
-  test "should update User" do
-    visit user_url(@user)
-    click_on "Edit this user", match: :first
-
-    fill_in "Email", with: @user.email
-    fill_in "Name", with: @user.name
-    click_on "Update User"
-
-    assert_text "User was successfully updated"
-    click_on "Back"
-  end
-
-  test "should destroy User" do
-    visit user_url(@user)
-    click_on "Destroy this user", match: :first
-
-    assert_text "User was successfully destroyed"
+    assert_text "must end with u.northwestern.edu"
   end
 end

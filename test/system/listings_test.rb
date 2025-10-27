@@ -22,7 +22,7 @@ class ListingsTest < ApplicationSystemTestCase
     fill_in "Title", with: @listing.title
     click_on "Create Listing"
 
-    assert_text "Listing was successfully created"
+    assert_text "Listing was successfully created."
   end
 
   test "should update Listing" do
@@ -35,7 +35,7 @@ class ListingsTest < ApplicationSystemTestCase
     fill_in "Title", with: @listing.title
     click_on "Update Listing"
 
-    assert_text "Listing was successfully updated"
+    assert_text "Listing was successfully updated."
   end
 
   test "should destroy Listing" do
@@ -43,6 +43,6 @@ class ListingsTest < ApplicationSystemTestCase
     visit listing_url(@listing)
     click_on "Destroy this listing", match: :first
 
-    assert_text "Listing was successfully destroyed"
+    assert_text "Listing was successfully destroyed."
   end
 end
