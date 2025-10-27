@@ -85,7 +85,9 @@ class ListingsController < ApplicationController
     end
 
     def listing_attributes
-      listing_params.except(:remove_image)
+      listing_params.except(:remove_image).tap do |attrs|
+        attrs[:image] = nil if attrs.key?(:image) && attrs[:image].respond_to?(:blank?) && attrs[:image].blank?
+      end
     end
 
     def remove_image_requested?
