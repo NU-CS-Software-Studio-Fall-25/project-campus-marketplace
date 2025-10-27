@@ -41,7 +41,9 @@ class ListingsTest < ApplicationSystemTestCase
   test "should destroy Listing" do
     sign_in_as(@user)
     visit listing_url(@listing)
-    click_on "Destroy this listing", match: :first
+    accept_confirm do
+      click_on "Destroy this listing", match: :first
+    end
 
     assert_text "Listing was successfully destroyed."
   end
