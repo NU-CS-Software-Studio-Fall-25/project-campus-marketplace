@@ -1,12 +1,15 @@
 <% content_for :title, "Editing listing" %>
 
-<h1>Editing listing</h1>
+<div class="mx-auto max-w-3xl">
+  <div class="rounded-lg bg-white p-6 shadow-md">
+    <h1 class="mb-6 border-b border-gray-200 pb-4 text-2xl font-bold text-gray-900">Editing Listing</h1>
 
-<%= render "form", listing: @listing %>
+    <%= render "form", listing: @listing %>
+  </div>
 
-<br>
-
-<div>
-  <%= link_to "Show this listing", @listing %> |
-  <%= link_to "Back to listings", listings_path %>
+  <div class="mt-6 flex items-center justify-center gap-4 text-sm">
+    <%= link_to "Show this listing", @listing, class: "font-medium text-indigo-600 hover:text-indigo-500" %>
+    <span class="text-gray-400">|</span>
+    <%= link_to "Back to listings", listings_path, class: "font-medium text-indigo-600 hover:text-indigo-500" %>
+  </div>
 </div>
