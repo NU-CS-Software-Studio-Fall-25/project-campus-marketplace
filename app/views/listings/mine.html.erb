@@ -1,40 +1,72 @@
 <% content_for :title, "My Listings" %>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h1 class="mb-0">My Listings</h1>
-  <%= link_to 'New listing', new_listing_path, class: 'btn btn-success' %>
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+  <h1 class="text-3xl font-bold text-gray-800">My Listings</h1>
+  <%= link_to 'New listing',
+              new_listing_path,
+              class: "inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" %>
 </div>
 
 <% if @listings.any? %>
-  <div class="table-responsive">
-    <table class="table table-striped table-hover table-listings">
-      <thead class="table-primary">
-        <tr>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Price</th>
-          <th class="text-end">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @listings.each do |listing| %>
-          <tr>
-            <td><%= listing.title %></td>
-            <td><%= truncate(listing.description, length: 80) %></td>
-            <td><%= number_to_currency(listing.price || 0) %></td>
-            <td class="text-end">
-              <%= link_to 'Show', listing, class: 'btn btn-sm btn-primary me-1' %>
-              <%= link_to 'Edit', edit_listing_path(listing), class: 'btn btn-sm btn-secondary me-1' %>
-              <%= link_to 'Delete', listing, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+  <div class="mt-6 grid max-w-6xl mx-auto grid-cols-1 gap-16 xl:gap-20 sm:grid-cols-2 xl:grid-cols-3">
+    <% @listings.each do |listing| %>
+      <div class="bg-white rounded-2xl shadow-md ring-1 ring-gray-100 overflow-hidden transition-shadow duration-300 ease-in-out hover:shadow-xl">
+        <div class="h-48 overflow-hidden bg-gray-100">
+          <% if defined?(ActiveStorage) && listing.respond_to?(:image) && listing.image.respond_to?(:attached?) && listing.image.attached? %>
+            <%= image_tag listing.image.variant(resize_to_fill: [600, 400]),
+                          alt: listing.title,
+                          class: "w-full h-full object-cover" %>
+          <% elsif listing.respond_to?(:image_url) && listing.image_url.present? %>
+            <%= image_tag listing.image_url,
+                          alt: listing.title,
+                          class: "w-full h-full object-cover" %>
+          <% else %>
+            <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+              <svg class="text-gray-400" role="img" aria-label="No image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="80" height="80" focusable="false">
+                <path fill="currentColor" d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7zm5 2l2.5 3 1.5-2L15 15H5l3-6z"/>
+              </svg>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="p-6 space-y-4">
+          <div class="flex items-start justify-between gap-4">
+            <h2 class="text-xl font-semibold text-gray-900 leading-tight"><%= listing.title %></h2>
+            <div class="text-lg font-bold text-green-600 whitespace-nowrap"><%= number_to_currency(listing.price || 0) %></div>
+          </div>
+
+          <p class="text-sm text-gray-600 leading-relaxed h-16 overflow-hidden"><%= truncate(listing.description, length: 140) %></p>
+        </div>
+
+        <div class="px-6 pb-6">
+          <div class="flex flex-wrap items-center gap-3">
+            <%= link_to 'View',
+                        listing_path(listing),
+                        class: "inline-flex items-center justify-center rounded-lg border border-blue-600 bg-white px-4 py-2 text-sm font-semibold text-blue-600 transition hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" %>
+            <%= link_to 'Edit',
+                        edit_listing_path(listing),
+                        class: "inline-flex items-center justify-center rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" %>
+            <%= button_to 'Delete',
+                          listing_path(listing),
+                          method: :delete,
+                          form: { data: { turbo_confirm: 'Delete this listing? This action cannot be undone.' }, class: "inline-block" },
+                          class: "inline-flex items-center justify-center rounded-lg border border-red-500 bg-white px-4 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
   </div>
 <% else %>
-  <div class="alert alert-info">
-    You don’t have any listings yet.
-    <%= link_to 'Create your first listing', new_listing_path, class: 'alert-link ms-1' %>
+  <div class="max-w-xl mx-auto bg-white rounded-2xl shadow-md p-8 text-center">
+    <h2 class="text-2xl font-semibold text-gray-900">You haven’t posted any listings yet</h2>
+    <p class="mt-3 text-sm text-gray-500">Create your first listing to share what you have to offer, or browse the marketplace to get inspired.</p>
+    <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <%= link_to 'Create a listing',
+                  new_listing_path,
+                  class: "inline-flex items-center justify-center rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 w-full sm:w-auto" %>
+      <%= link_to 'Browse all listings',
+                  listings_path,
+                  class: "inline-flex items-center justify-center rounded-lg border border-transparent px-5 py-3 text-sm font-medium text-blue-600 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 w-full sm:w-auto" %>
+    </div>
   </div>
 <% end %>

@@ -1,16 +1,75 @@
 <% content_for :title, "Create Account" %>
 
-<div class="row justify-content-center">
-  <div class="col-lg-6">
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h1 class="card-title h3 mb-3">Join the NU Campus Marketplace</h1>
-        <p class="text-muted">Sign up with your Northwestern email to start buying and selling.</p>
-        <%= render "form", user: @user %>
-        <div class="mt-3 text-center">
-          <%= link_to "Already have an account? Sign in", new_session_path %>
-        </div>
-      </div>
+<div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-8 sm:p-10">
+  <div class="text-center mb-6">
+    <h1 class="text-3xl font-semibold text-gray-900">Join NU Campus Marketplace</h1>
+    <p class="mt-2 text-sm text-gray-500">Create your account to start buying and selling across campus.</p>
+  </div>
+
+  <% if @user.errors.any? %>
+    <div class="bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg px-4 py-3 mb-6" role="alert">
+      <h2 class="text-sm font-semibold">We couldn’t create your account yet:</h2>
+      <ul class="mt-2 space-y-1 text-sm">
+        <% @user.errors.full_messages.each do |message| %>
+          <li>• <%= message %></li>
+        <% end %>
+      </ul>
     </div>
+  <% end %>
+
+  <%= form_with(model: @user, local: true, class: "space-y-5") do |form| %>
+    <div>
+      <%= form.label :email_address, "Northwestern email", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.email_field :email_address,
+                           required: true,
+                           autocomplete: "email",
+                           class: "mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-base text-gray-900 placeholder-gray-400 shadow-sm transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:outline-none" %>
+      <p class="mt-2 text-xs text-gray-500">Must be an @u.northwestern.edu email address.</p>
+    </div>
+
+    <div>
+      <%= form.label :username, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_field :username,
+                          required: true,
+                          autocomplete: "username",
+                          class: "mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-base text-gray-900 placeholder-gray-400 shadow-sm transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:outline-none" %>
+    </div>
+
+    <div>
+      <%= form.label :phone_number, "Phone number (optional)", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.telephone_field :phone_number,
+                               autocomplete: "tel",
+                               placeholder: "e.g. 8475550101",
+                               class: "mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-base text-gray-900 placeholder-gray-400 shadow-sm transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:outline-none" %>
+      <p class="mt-2 text-xs text-gray-500">Digits only, we’ll text you only for important updates.</p>
+    </div>
+
+    <div>
+      <%= form.label :password, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.password_field :password,
+                              required: true,
+                              autocomplete: "new-password",
+                              class: "mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-base text-gray-900 placeholder-gray-400 shadow-sm transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:outline-none" %>
+      <p class="mt-2 text-xs text-gray-500">Use 8 or more characters with a mix of letters and numbers.</p>
+    </div>
+
+    <div>
+      <%= form.label :password_confirmation, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.password_field :password_confirmation,
+                              required: true,
+                              autocomplete: "new-password",
+                              class: "mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-base text-gray-900 placeholder-gray-400 shadow-sm transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:outline-none" %>
+    </div>
+
+    <div class="pt-8 pb-4 text-center">
+      <%= form.submit "Create Account",
+                      class: "inline-flex items-center justify-center rounded-md bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 text-sm transition" %>
+    </div>
+  <% end %>
+
+  <div class="mt-8 text-center text-sm text-gray-500">
+    <span>Already have an account?</span>
+    <%= link_to "Sign in", new_session_path,
+                class: "ml-1 rounded px-2 py-1 text-blue-600 transition hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" %>
   </div>
 </div>

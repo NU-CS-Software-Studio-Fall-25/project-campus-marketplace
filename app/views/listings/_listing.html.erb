@@ -1,3 +1,5 @@
+<% hide_view = local_assigns.fetch(:hide_view, false) %>
+
 <div id="<%= dom_id listing %>" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out">
   <%= link_to listing_path(listing), class: "block" do %>
     <div class="h-48 overflow-hidden">
@@ -32,9 +34,13 @@
 
   <div class="p-4 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
     <div>
-      <%= link_to 'View', listing, class: 'text-sm font-medium text-blue-600 hover:text-blue-800' %>
+      <% unless hide_view %>
+        <%= link_to 'View', listing, class: 'text-sm font-medium text-blue-600 hover:text-blue-800' %>
+      <% end %>
       <% if listing.user == current_user %>
-        <%= link_to 'Edit', edit_listing_path(listing), class: 'ml-4 text-sm font-medium text-gray-600 hover:text-gray-800' %>
+        <% edit_classes = ['text-sm', 'font-medium', 'text-gray-600', 'hover:text-gray-800'] %>
+        <% edit_classes << 'ml-4' unless hide_view %>
+        <%= link_to 'Edit', edit_listing_path(listing), class: edit_classes.join(' ') %>
       <% end %>
     </div>
     <% if listing.user == current_user %>
