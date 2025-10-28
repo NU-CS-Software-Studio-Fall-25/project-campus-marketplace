@@ -21,4 +21,4 @@ Users should be able to create an account, enter items along with description an
 - 4 views: show all listings, create new listing, show user's existing listings, show one listings
 
 # Website:
-https://still-anchorage-83254-12ed1b53baf3.herokuapp.com/
+https://nu-campus-marketplace-b2a0e3bf499e.herokuapp.com/
