@@ -1,9 +1,1 @@
 <%= render partial: "listing", locals: { listing: @listing, hide_view: true } %>
-
-<div class="d-flex gap-2 mt-3">
-  <%= link_to 'Back to all listings', listings_path, class: 'btn btn-outline-primary' %>
-  <% if @listing.user == current_user %>
-    <%= link_to 'Edit this listing', edit_listing_path(@listing), class: 'btn btn-secondary' %>
-    <%= button_to 'Destroy this listing', @listing, method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
-  <% end %>
-</div>
