@@ -4,7 +4,16 @@ class ListingsController < ApplicationController
 
   # GET /listings or /listings.json
   def index
-    @listings = Listing.includes(:user).order(created_at: :desc)
+    @query = params[:q].to_s.strip
+    @listings = Listing.includes(:user)
+    if @query.present?
+      sanitized = ActiveRecord::Base.sanitize_sql_like(@query)
+      @listings = @listings.where(
+        "title ILIKE :search OR description ILIKE :search",
+        search: "%#{sanitized}%"
+      )
+    end
+    @listings = @listings.order(created_at: :desc)
   end
 
   # GET /listings/mine

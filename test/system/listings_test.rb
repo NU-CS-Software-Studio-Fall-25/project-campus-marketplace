@@ -47,4 +47,15 @@ class ListingsTest < ApplicationSystemTestCase
 
     assert_text "Listing was successfully destroyed."
   end
+
+  test "search filters listings" do
+    sign_in_as(@user)
+    visit listings_url
+
+    fill_in "Search listings", with: "Calculus"
+    click_on "Search"
+
+    assert_text "Calculus Textbook"
+    assert_no_text "MacBook Pro"
+  end
 end
