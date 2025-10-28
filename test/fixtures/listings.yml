@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  title: MyString
-  description: MyText
-  price: 9.99
+  title: Calculus Textbook
+  description: Latest edition, no markings.
+  price: 40.0
   user: one
 
 two:
-  title: MyString
-  description: MyText
-  price: 9.99
+  title: MacBook Pro
+  description: 13-inch, 8GB RAM, 256GB SSD.
+  price: 800.0
   user: two
