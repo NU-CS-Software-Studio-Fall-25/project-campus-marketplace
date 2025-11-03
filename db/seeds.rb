@@ -12,6 +12,8 @@ return unless Rails.env.development?
 
 sample_users = [
   {
+    first_name: "Alex",
+    last_name: "Johnson",
     email_address: "alex@u.northwestern.edu",
     username: "alex",
     phone_number: "8475550101",
@@ -30,6 +32,8 @@ sample_users = [
     ]
   },
   {
+    first_name: "Jamie",
+    last_name: "Chen",
     email_address: "jamie@u.northwestern.edu",
     username: "jamie",
     phone_number: "3125550199",
@@ -48,6 +52,8 @@ sample_users = [
     ]
   },
   {
+    first_name: "Riley",
+    last_name: "Garcia",
     email_address: "riley@u.northwestern.edu",
     username: "riley",
     password: "password123",

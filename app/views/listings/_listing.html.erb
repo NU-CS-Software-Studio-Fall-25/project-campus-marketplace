@@ -1,4 +1,5 @@
 <% hide_view = local_assigns.fetch(:hide_view, false) %>
+<% seller = listing.user %>
 
 <div id="<%= dom_id listing %>" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out">
   <%= link_to listing_path(listing), class: "block" do %>
@@ -27,23 +28,32 @@
     </div>
   <% end %>
 
-  <div class="p-4 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
-    <div>
-      <% unless hide_view %>
-        <%= link_to 'Interested',
-                    listing,
-                    class: 'inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1' %>
-      <% end %>
+  <div class="p-4 bg-gray-50 border-t border-gray-200 space-y-3">
+    <div class="text-sm text-gray-600">
+      <span class="font-medium text-gray-800">Seller:</span>
+      <%= seller&.full_name.presence || seller&.username || "Unknown seller" %>
+    </div>
+
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex flex-wrap items-center gap-3">
+        <% unless hide_view %>
+          <%= link_to 'Interested',
+                      listing,
+                      class: 'inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1' %>
+        <% end %>
+        <% if listing.user == current_user %>
+          <%= link_to 'Edit',
+                      edit_listing_path(listing),
+                      class: 'inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1' %>
+        <% end %>
+      </div>
       <% if listing.user == current_user %>
-        <% edit_classes = ['text-sm', 'font-medium', 'text-gray-600', 'hover:text-gray-800'] %>
-        <% edit_classes << 'ml-4' unless hide_view %>
-        <%= link_to 'Edit', edit_listing_path(listing), class: edit_classes.join(' ') %>
+        <%= link_to 'Delete',
+                    listing,
+                    method: :delete,
+                    data: { turbo_confirm: 'Are you sure?' },
+                    class: 'text-sm font-medium text-red-600 hover:text-red-800' %>
       <% end %>
     </div>
-    <% if listing.user == current_user %>
-      <div>
-        <%= link_to 'Delete', listing, method: :delete, data: { turbo_confirm: 'Are you sure?' }, class: 'text-sm font-medium text-red-600 hover:text-red-800' %>
-      </div>
-    <% end %>
   </div>
 </div>
