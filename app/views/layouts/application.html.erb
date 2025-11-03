@@ -32,7 +32,7 @@
           </div>
           <div class="flex items-center gap-4">
             <% if authenticated? %>
-              <span class="text-sm text-gray-400 hidden sm:inline"><%= current_user.email_address %></span>
+              <span class="text-sm text-gray-300 hidden sm:inline">Hi <%= current_user.first_name.presence || current_user.username || current_user.email_address %></span>
               <%= button_to 'Sign out', session_path, method: :delete, class: 'bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-md text-sm transition' %>
             <% else %>
               <%= link_to 'Sign in', new_session_path, class: 'bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded-md text-sm transition' %>

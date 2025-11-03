@@ -22,6 +22,6 @@ class ProfilesController < ApplicationController
 
   private
     def profile_params
-      params.fetch(:user, {}).permit(:phone_number)
+      params.fetch(:user, {}).permit(:phone_number, :first_name, :last_name)
     end
 end

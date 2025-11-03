@@ -28,7 +28,7 @@ class ListingsTest < ApplicationSystemTestCase
   test "should update Listing" do
     sign_in_as(@user)
     visit listing_url(@listing)
-    click_on "Edit this listing", match: :first
+    click_on "Edit", match: :first
 
     fill_in "Description", with: "Updated description"
     fill_in "Price", with: @listing.price
@@ -42,7 +42,7 @@ class ListingsTest < ApplicationSystemTestCase
     sign_in_as(@user)
     visit listing_url(@listing)
     accept_confirm do
-      click_on "Destroy this listing", match: :first
+      click_on "Delete", match: :first
     end
 
     assert_text "Listing was successfully destroyed."

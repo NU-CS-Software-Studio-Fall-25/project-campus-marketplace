@@ -4,8 +4,13 @@
 <% if seller.present? %>
   <div class="mx-auto mt-8 w-full max-w-3xl">
     <div class="rounded-2xl border border-blue-100 bg-blue-50 p-6 shadow-sm">
-      <h2 class="text-lg font-semibold text-blue-900">Seller contact</h2>
+      <% seller_name = seller&.full_name.presence || seller&.username || "Seller" %>
+      <h2 class="text-lg font-semibold text-blue-900">Contact <%= seller_name %></h2>
       <div class="mt-4 space-y-4">
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-800">Name</span>
+          <span class="text-base font-semibold text-blue-900"><%= seller_name %></span>
+        </div>
         <div class="flex flex-wrap items-center gap-3">
           <span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-800">Email</span>
           <%= mail_to seller.email_address,

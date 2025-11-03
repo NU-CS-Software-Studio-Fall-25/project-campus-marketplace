@@ -10,6 +10,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_difference("User.count") do
       post users_url, params: {
         user: {
+          first_name: "New",
+          last_name: "User",
           email_address: "newuser@u.northwestern.edu",
           username: "newuser",
           phone_number: "8475550000",
@@ -26,6 +28,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference("User.count") do
       post users_url, params: {
         user: {
+          first_name: "Invalid",
+          last_name: "User",
           email_address: "invalid@example.com",
           username: "invaliduser",
           password: "password123",
