@@ -48,11 +48,12 @@
         <% end %>
       </div>
       <% if listing.user == current_user %>
-        <%= link_to 'Delete',
-                    listing,
-                    method: :delete,
-                    data: { turbo_confirm: 'Are you sure?' },
-                    class: 'text-sm font-medium text-red-600 hover:text-red-800' %>
+        <%= button_to 'Delete',
+                      listing,
+                      method: :delete,
+                      data: { turbo_confirm: 'Are you sure?' },
+                      class: 'text-sm font-medium text-red-600 hover:text-red-800 bg-transparent border-0 p-0',
+                      form: { class: 'inline-block' } %>
       <% end %>
     </div>
   </div>
