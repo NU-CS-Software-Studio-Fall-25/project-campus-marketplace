@@ -19,6 +19,6 @@ class User < ApplicationRecord
   validates :phone_number, allow_blank: true, format: { with: PHONE_REGEX, message: "must be digits with optional leading +" }
 
   def full_name
-    [first_name, last_name].select(&:present?).join(" ")
+    [ first_name, last_name ].select(&:present?).join(" ")
   end
 end
