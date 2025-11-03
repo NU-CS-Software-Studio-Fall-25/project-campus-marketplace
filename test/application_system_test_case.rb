@@ -8,6 +8,6 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     fill_in "email_address", with: user.email_address
     fill_in "password", with: password
     click_button "Sign in"
-    assert_selector "button", text: "Sign out"
+    assert_selector :link_or_button, "Sign out"
   end
 end
