@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .pagy-nav {
+    @apply mt-8 flex items-center justify-center gap-2;
+  }
+
+  .pagy-nav .page {
+    @apply inline-flex items-center justify-center rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-600 shadow-sm transition hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50;
+  }
+
+  .pagy-nav .page > a {
+    @apply inline-flex h-full w-full items-center justify-center rounded-lg px-3 py-1 text-inherit hover:no-underline;
+  }
+
+  .pagy-nav .page.active {
+    @apply border-blue-600 bg-blue-600 text-white hover:bg-blue-600 hover:text-white;
+  }
+
+  .pagy-nav .page.disabled {
+    @apply cursor-not-allowed border-gray-100 bg-gray-100 px-3 py-1 text-gray-400 hover:border-gray-100 hover:bg-gray-100 hover:text-gray-400;
+  }
+
+  .pagy-nav .page.gap {
+    @apply border-none bg-transparent px-2 py-1 shadow-none text-gray-400;
+  }
+}
