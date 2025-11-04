@@ -1,0 +1,11 @@
+<p>Hi <%= @user.first_name %>,</p>
+
+<p>We received a request to reset the password for your NU Campus Marketplace account. You can set a new password by visiting the link below within the next 30 minutes:</p>
+
+<p>
+  <%= link_to "Reset your password", edit_password_url(@token, email: @user.email_address) %>
+</p>
+
+<p>If you didn’t request this, you can ignore this email—your password will stay the same.</p>
+
+<p>Thanks,<br>The NU Campus Marketplace team</p>

@@ -1,3 +1,5 @@
+require "securerandom"
+
 class User < ApplicationRecord
   has_secure_password
   has_many :sessions, dependent: :destroy
@@ -11,6 +13,7 @@ class User < ApplicationRecord
 
   EMAIL_DOMAIN_REGEX = /\A[^@\s]+@u\.northwestern\.edu\z/i
   PHONE_REGEX = /\A\+?\d{10,15}\z/
+  PASSWORD_RESET_TOKEN_VALID_FOR = 30.minutes
 
   validates :first_name, presence: true, length: { maximum: 50 }
   validates :last_name, presence: true, length: { maximum: 50 }
@@ -20,5 +23,32 @@ class User < ApplicationRecord
 
   def full_name
     [ first_name, last_name ].select(&:present?).join(" ")
+  end
+
+  def generate_password_reset!
+    raw_token = SecureRandom.urlsafe_base64(32)
+
+    update!(
+      reset_password_digest: BCrypt::Password.create(raw_token),
+      reset_password_sent_at: Time.current
+    )
+
+    raw_token
+  end
+
+  def valid_password_reset_token?(token)
+    return false if reset_password_digest.blank? || token.blank?
+
+    BCrypt::Password.new(reset_password_digest).is_password?(token)
+  rescue BCrypt::Errors::InvalidHash
+    false
+  end
+
+  def password_reset_expired?
+    reset_password_sent_at.blank? || reset_password_sent_at < PASSWORD_RESET_TOKEN_VALID_FOR.ago
+  end
+
+  def clear_password_reset!
+    update_columns(reset_password_digest: nil, reset_password_sent_at: nil)
   end
 end
