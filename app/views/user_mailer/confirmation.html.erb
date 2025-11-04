@@ -1,0 +1,14 @@
+<p>Hi <%= @user.first_name %>,</p>
+
+<p>Welcome to NU Campus Marketplace! Please confirm that this is your Northwestern email address by clicking the button below:</p>
+
+<p>
+  <a href="<%= confirmation_url(@token, email: @user.email_address) %>"
+     style="display:inline-block;padding:12px 20px;background-color:#2563eb;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:600;">
+    Confirm my account
+  </a>
+</p>
+
+<p>If you didn’t create this account, you can safely ignore this message.</p>
+
+<p>Thanks,<br>The NU Campus Marketplace team</p>
