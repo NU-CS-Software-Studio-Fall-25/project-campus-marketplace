@@ -4,7 +4,11 @@ class ConfirmationsController < ApplicationController
   def show
     user = User.find_by(email_address: params[:email])
 
-    if user.present? && user.pending_confirmation? && valid_token?(user, params[:token])
+    if user.blank?
+      redirect_to new_session_path, alert: "We couldn't find an account associated with that link."
+    elsif user.confirmed?
+      redirect_to new_session_path, notice: "Your email is already confirmed. Please sign in."
+    elsif user.pending_confirmation? && valid_token?(user, params[:token])
       user.confirm!
       start_new_session_for(user)
       redirect_to profile_path, notice: "Your email has been confirmed!"
