@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_27_235959) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_04_161153) do
   create_schema "_heroku"
 
   # These are extensions that must be enabled in order to support this database
@@ -72,7 +72,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_27_235959) do
     t.string "phone_number"
     t.string "first_name", null: false
     t.string "last_name", null: false
+    t.string "reset_password_digest"
+    t.datetime "reset_password_sent_at"
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
+    t.index ["reset_password_digest"], name: "index_users_on_reset_password_digest"
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
