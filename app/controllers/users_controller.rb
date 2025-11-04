@@ -18,6 +18,14 @@ class UsersController < ApplicationController
     end
   end
 
+  def destroy
+    user = Current.user
+    user.destroy!
+    terminate_session
+    UserMailer.with(user: user).goodbye.deliver_later
+    redirect_to new_session_path, notice: "Your account has been deleted."
+  end
+
   private
     def user_params
       params.require(:user).permit(:email_address, :password, :password_confirmation, :username, :phone_number, :first_name, :last_name)
