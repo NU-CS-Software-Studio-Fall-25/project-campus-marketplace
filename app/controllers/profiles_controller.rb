@@ -2,6 +2,7 @@ class ProfilesController < ApplicationController
   def show
     @user = current_user
     @listing_count = @user.listings.count
+    @editing = ActiveModel::Type::Boolean.new.cast(params[:edit])
   end
 
   def update
@@ -15,6 +16,7 @@ class ProfilesController < ApplicationController
       redirect_to profile_path, notice: "Profile updated."
     else
       @listing_count = @user.listings.count
+      @editing = true
       flash.now[:alert] = @user.errors.full_messages.to_sentence
       render :show, status: :unprocessable_entity
     end

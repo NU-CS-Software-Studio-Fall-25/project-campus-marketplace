@@ -4,23 +4,23 @@
 
 @layer components {
   .pagy-nav {
-    @apply mt-8 flex items-center justify-center gap-2;
+    @apply mt-10 inline-flex items-center justify-center gap-2 rounded-full border border-gray-200 bg-white/80 px-4 py-2 shadow-sm backdrop-blur;
   }
 
   .pagy-nav .page {
-    @apply inline-flex items-center justify-center rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-600 shadow-sm transition hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50;
+    @apply inline-flex h-9 min-w-[2.25rem] items-center justify-center rounded-full border border-gray-200 bg-transparent px-3 text-sm font-medium text-gray-500 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600;
   }
 
   .pagy-nav .page > a {
-    @apply inline-flex h-full w-full items-center justify-center rounded-lg px-3 py-1 text-inherit hover:no-underline;
+    @apply inline-flex h-full w-full items-center justify-center rounded-full px-3 py-1 text-inherit hover:no-underline;
   }
 
   .pagy-nav .page.active {
-    @apply border-blue-600 bg-blue-600 text-white hover:bg-blue-600 hover:text-white;
+    @apply border-blue-600 bg-blue-600 text-white font-semibold shadow-lg ring-4 ring-blue-200/60 hover:bg-blue-600 hover:text-white;
   }
 
   .pagy-nav .page.disabled {
-    @apply cursor-not-allowed border-gray-100 bg-gray-100 px-3 py-1 text-gray-400 hover:border-gray-100 hover:bg-gray-100 hover:text-gray-400;
+    @apply cursor-not-allowed text-gray-300;
   }
 
   .pagy-nav .page.gap {
