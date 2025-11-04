@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   resource :session, only: %i[new create destroy]
   resources :passwords, param: :token, only: %i[new create edit update]
-  resources :confirmations, param: :token, only: :show
-  resource :confirmation, only: :create
+  resource :confirmation, only: :create, controller: "confirmations"
+  get "confirmations/:token", to: "confirmations#show", as: :confirmation_token
   resources :listings do
     collection do
       get :mine
