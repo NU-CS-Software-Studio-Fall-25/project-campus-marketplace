@@ -55,11 +55,9 @@ class ListingsController < ApplicationController
   # PATCH/PUT /listings/1 or /listings/1.json
   def update
     attrs = listing_attributes
-    remove_image = remove_image_requested? && attrs[:image].blank?
 
     respond_to do |format|
       if @listing.update(attrs)
-        purge_listing_image(@listing) if remove_image
         format.html { redirect_to @listing, notice: "Listing was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @listing }
       else
@@ -92,20 +90,12 @@ class ListingsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def listing_params
-      @listing_params ||= params.require(:listing).permit(:title, :description, :price, :image, :remove_image)
+      @listing_params ||= params.require(:listing).permit(:title, :description, :price, :image)
     end
 
     def listing_attributes
-      listing_params.except(:remove_image).tap do |attrs|
-        attrs[:image] = nil if attrs.key?(:image) && attrs[:image].respond_to?(:blank?) && attrs[:image].blank?
+      listing_params.tap do |attrs|
+        attrs.delete(:image) if attrs.key?(:image) && attrs[:image].respond_to?(:blank?) && attrs[:image].blank?
       end
-    end
-
-    def remove_image_requested?
-      ActiveModel::Type::Boolean.new.cast(listing_params[:remove_image])
-    end
-
-    def purge_listing_image(listing)
-      listing.image.purge_later if listing.image.attached?
     end
 end

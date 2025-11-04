@@ -16,7 +16,11 @@
         <%= form.label :title, class: "block text-sm font-medium text-gray-700 pt-2" %>
       </div>
       <div class="sm:col-span-4">
-        <%= form.text_field :title, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: "What are you selling?" %>
+        <%= form.text_field :title,
+                            class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+                            placeholder: "What are you selling?",
+                            maxlength: 50,
+                            required: true %>
       </div>
     </div>
 
@@ -25,7 +29,13 @@
         <%= form.label :description, "Description", for: "Description", class: "block text-sm font-medium text-gray-700 pt-2" %>
       </div>
       <div class="sm:col-span-4">
-        <%= form.text_area :description, id: "Description", rows: 4, class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder: "Share a short description so buyers know what to expect." %>
+        <%= form.text_area :description,
+                           id: "Description",
+                           rows: 4,
+                           class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+                           placeholder: "Share a short description so buyers know what to expect.",
+                           maxlength: 1000,
+                           required: true %>
       </div>
     </div>
 
@@ -38,7 +48,12 @@
           <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <span class="text-gray-500 sm:text-sm">$</span>
           </div>
-          <%= form.number_field :price, class: "block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", step: "0.01", min: 0, placeholder: "20.00" %>
+          <%= form.number_field :price,
+                                 class: "block w-full rounded-md border-gray-300 pl-7 pr-12 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+                                 step: "0.01",
+                                 min: 0,
+                                 placeholder: "20.00",
+                                 required: true %>
           <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
             <span class="text-gray-500 sm:text-sm" id="price-currency">USD</span>
           </div>
@@ -51,14 +66,13 @@
         <%= form.label :image, class: "block text-sm font-medium text-gray-700 pt-2" %>
       </div>
       <div class="sm:col-span-4">
-        <%= form.file_field :image, class: "block w-full text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-gray-100 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-gray-700 hover:file:bg-gray-200", direct_upload: true %>
+        <%= form.file_field :image,
+                            class: "block w-full text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-gray-100 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-gray-700 hover:file:bg-gray-200",
+                            direct_upload: true,
+                            required: !listing.image.attached? %>
         <% if listing.image.attached? %>
           <div class="mt-4">
             <%= image_tag listing.image.variant(resize_to_limit: [150, 150]), class: "h-24 w-24 rounded-md object-cover" %>
-            <label class="mt-2 flex items-center text-sm">
-              <%= form.check_box :remove_image, class: "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" %>
-              <span class="ml-2 text-gray-700">Remove current image</span>
-            </label>
           </div>
         <% end %>
       </div>
