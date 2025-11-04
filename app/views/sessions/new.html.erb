@@ -39,5 +39,23 @@
                 class: "rounded px-2 py-1 text-blue-600 transition hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" %>
     <%= link_to "Forgot password?", new_password_path,
                 class: "rounded px-2 py-1 text-gray-500 transition hover:text-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" %>
+    <%= form_with url: confirmation_path,
+                  scope: :confirmation,
+                  method: :post,
+                  local: true,
+                  class: "mt-4 w-full space-y-2" do |form| %>
+      <div>
+        <%= form.label :email_address, "Didn't get a confirmation email?", class: "block text-xs font-medium text-gray-500" %>
+        <div class="mt-1 flex gap-2">
+          <%= form.email_field :email_address,
+                               required: true,
+                               autocomplete: "email",
+                               placeholder: "your@u.northwestern.edu",
+                               class: "flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" %>
+          <%= form.submit "Resend",
+                          class: "rounded-md bg-gray-800 px-3 py-2 text-sm font-semibold text-white transition hover:bg-gray-700" %>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>

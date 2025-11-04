@@ -9,8 +9,9 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      start_new_session_for(@user)
-      redirect_to profile_path, notice: "Welcome to the marketplace!"
+      token = @user.generate_confirmation_token!
+      UserMailer.with(user: @user, token: token).confirmation.deliver_later
+      redirect_to new_session_path, notice: "Check your email to confirm your account before signing in."
     else
       flash.now[:alert] = @user.errors.full_messages.to_sentence
       render :new, status: :unprocessable_entity

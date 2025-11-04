@@ -148,6 +148,8 @@ ActiveRecord::Base.transaction do
     identifier_email = attributes[:email_address]
     identifier_username = attributes[:username]
 
+    attributes[:confirmed_at] ||= Time.current
+
     user = User.find_by(email_address: identifier_email) || User.find_by(username: identifier_username) || User.new
     user.assign_attributes(attributes)
     user.password = password
