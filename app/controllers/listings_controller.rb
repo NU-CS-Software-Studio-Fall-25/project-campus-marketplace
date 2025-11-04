@@ -13,7 +13,9 @@ class ListingsController < ApplicationController
         search: "%#{sanitized}%"
       )
     end
-    @listings = @listings.order(created_at: :desc)
+    pagy_params = {}
+    pagy_params[:q] = @query if @query.present?
+    @pagy, @listings = pagy(@listings.order(created_at: :desc), items: 12, params: pagy_params)
   end
 
   # GET /listings/mine
