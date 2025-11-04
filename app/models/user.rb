@@ -11,13 +11,16 @@ class User < ApplicationRecord
   normalizes :first_name, with: ->(name) { name&.squish }
   normalizes :last_name, with: ->(name) { name&.squish }
 
-  EMAIL_DOMAIN_REGEX = /\A[^@\s]+@u\.northwestern\.edu\z/i
+  EMAIL_DOMAIN_REGEX = /\A[^@\s]+@(u\.)?northwestern\.edu\z/i
   PHONE_REGEX = /\A\+?\d{10,15}\z/
   PASSWORD_RESET_TOKEN_VALID_FOR = 30.minutes
 
   validates :first_name, presence: true, length: { maximum: 50 }
   validates :last_name, presence: true, length: { maximum: 50 }
-  validates :email_address, presence: true, uniqueness: { case_sensitive: false }, format: { with: EMAIL_DOMAIN_REGEX, message: "must end with u.northwestern.edu" }
+  validates :email_address,
+            presence: true,
+            uniqueness: { case_sensitive: false },
+            format: { with: EMAIL_DOMAIN_REGEX, message: "must end with northwestern.edu or u.northwestern.edu" }
   validates :username, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: 50 }
   validates :phone_number, allow_blank: true, format: { with: PHONE_REGEX, message: "must be digits with optional leading +" }
 
