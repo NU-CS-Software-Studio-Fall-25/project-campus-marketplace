@@ -1,7 +1,7 @@
 Hi <%= @user.first_name %>,
 
 Welcome to NU Campus Marketplace! Please confirm that this is your Northwestern email address by visiting the link below:
-<%= confirmation_url(@token, email: @user.email_address) %>
+<%= confirmation_token_url(@token, email: @user.email_address) %>
 
 If you didn’t create this account, you can ignore this message.
 

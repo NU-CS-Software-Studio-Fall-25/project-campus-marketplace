@@ -3,7 +3,7 @@
 <p>Welcome to NU Campus Marketplace! Please confirm that this is your Northwestern email address by clicking the button below:</p>
 
 <p>
-  <a href="<%= confirmation_url(@token, email: @user.email_address) %>"
+  <a href="<%= confirmation_token_url(@token, email: @user.email_address) %>"
      style="display:inline-block;padding:12px 20px;background-color:#2563eb;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:600;">
     Confirm my account
   </a>
