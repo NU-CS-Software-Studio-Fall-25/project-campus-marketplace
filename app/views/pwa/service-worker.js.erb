@@ -1,0 +1,144 @@
+<%
+  precache_urls = [
+    root_path,
+    pwa_manifest_path,
+    "/offline.html",
+    image_path("pwa/icon-192.png"),
+    image_path("pwa/icon-512.png")
+  ]
+
+  %w[tailwind.css application.css application.js].each do |asset|
+    begin
+      precache_urls << asset_path(asset)
+    rescue StandardError
+      # Ignore missing assets (e.g., in development before compilation)
+    end
+  end
+
+  precache_urls.uniq!
+%>
+const CACHE_VERSION = "<%= Rails.configuration.x.pwa_cache_version.presence || "v1" %>";
+const STATIC_CACHE = `marketplace-static-${CACHE_VERSION}`;
+const RUNTIME_CACHE = `marketplace-runtime-${CACHE_VERSION}`;
+const OFFLINE_URL = "/offline.html";
+const PRECACHE_URLS = <%= raw(precache_urls.to_json) %>;
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(STATIC_CACHE).then((cache) => cache.addAll(PRECACHE_URLS))
+  );
+
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys
+          .filter((key) => ![STATIC_CACHE, RUNTIME_CACHE].includes(key))
+          .map((key) => caches.delete(key))
+      )
+    )
+  );
+
+  self.clients.claim();
+});
+
+self.addEventListener("fetch", (event) => {
+  const { request } = event;
+
+  if (request.method !== "GET") {
+    return;
+  }
+
+  const url = new URL(request.url);
+
+  if (url.origin !== self.location.origin) {
+    return;
+  }
+
+  if (request.cache === "only-if-cached" && request.mode !== "same-origin") {
+    return;
+  }
+
+  if (request.mode === "navigate") {
+    event.respondWith(handleNavigationRequest(request));
+    return;
+  }
+
+  if (isAssetRequest(url.pathname)) {
+    event.respondWith(cacheFirst(request));
+    return;
+  }
+
+  event.respondWith(networkFirst(request));
+});
+
+async function handleNavigationRequest(request) {
+  try {
+    const response = await fetch(request);
+
+    if (response && response.ok) {
+      const cache = await caches.open(RUNTIME_CACHE);
+      cache.put(request, response.clone());
+    }
+
+    return response;
+  } catch (error) {
+    const cached = await caches.match(request);
+    return cached || caches.match(OFFLINE_URL);
+  }
+}
+
+async function cacheFirst(request) {
+  const cached = await caches.match(request);
+
+  if (cached) {
+    return cached;
+  }
+
+  try {
+    const response = await fetch(request);
+
+    if (response && response.ok) {
+      const cache = await caches.open(RUNTIME_CACHE);
+      cache.put(request, response.clone());
+    }
+
+    return response;
+  } catch (error) {
+    return caches.match(OFFLINE_URL);
+  }
+}
+
+async function networkFirst(request) {
+  try {
+    const response = await fetch(request);
+
+    if (response && response.ok) {
+      const cache = await caches.open(RUNTIME_CACHE);
+      cache.put(request, response.clone());
+    }
+
+    return response;
+  } catch (error) {
+    const cached = await caches.match(request);
+    return cached || caches.match(OFFLINE_URL);
+  }
+}
+
+function isAssetRequest(pathname) {
+  return [
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".svg",
+    ".webp",
+    ".gif",
+    ".css",
+    ".js",
+    ".woff2",
+    ".woff"
+  ].some((extension) => pathname.endsWith(extension));
+}
