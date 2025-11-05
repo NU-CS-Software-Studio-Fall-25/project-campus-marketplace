@@ -1,22 +1,28 @@
 {
-  "name": "MarketplaceApp",
+  "name": "NU Campus Marketplace",
+  "short_name": "Marketplace",
+  "description": "Buy and sell items across the NU campus community.",
+  "start_url": "<%= root_path %>?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#1f2937",
+  "background_color": "#ffffff",
   "icons": [
     {
-      "src": "/icon.png",
+      "src": "<%= image_path('pwa/icon-192.png') %>",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "<%= image_path('pwa/icon-512.png') %>",
       "type": "image/png",
       "sizes": "512x512"
     },
     {
-      "src": "/icon.png",
+      "src": "<%= image_path('pwa/icon-512.png') %>",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
     }
-  ],
-  "start_url": "/",
-  "display": "standalone",
-  "scope": "/",
-  "description": "MarketplaceApp.",
-  "theme_color": "red",
-  "background_color": "red"
+  ]
 }
