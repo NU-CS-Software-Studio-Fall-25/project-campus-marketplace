@@ -9,18 +9,49 @@ class ListingsController < ApplicationController
     if @query.present?
       sanitized = ActiveRecord::Base.sanitize_sql_like(@query)
       @listings = @listings.where(
-        "title ILIKE :search OR description ILIKE :search",
-        search: "%#{sanitized}%"
+        "title ILIKE :prefix OR title ILIKE :mid_prefix",
+        prefix: "#{sanitized}%",
+        mid_prefix: "% #{sanitized}%"
       )
     end
     pagy_params = {}
     pagy_params[:q] = @query if @query.present?
-    @pagy, @listings = pagy(@listings.order(created_at: :desc), items: 12, params: pagy_params)
+    respond_to do |format|
+      format.html do
+        @pagy, @listings = pagy(@listings.order(created_at: :desc), items: 12, params: pagy_params)
+      end
+      format.json do
+        pagy, listings = pagy(@listings.order(created_at: :desc), items: 12, params: pagy_params)
+        render json: {
+          html: render_to_string(partial: "listings/listings", locals: { listings: listings }, formats: [:html]),
+          pagination: view_context.pagy_nav(pagy)
+        }
+      end
+    end
   end
 
   # GET /listings/mine
   def mine
     @listings = Current.user.listings.order(created_at: :desc)
+  end
+
+  def suggestions
+    query = params[:q].to_s.strip
+    suggestions = []
+
+    if query.present?
+      sanitized = ActiveRecord::Base.sanitize_sql_like(query)
+      suggestions = Listing.where(
+        "title ILIKE :prefix OR title ILIKE :mid_prefix",
+        prefix: "#{sanitized}%",
+        mid_prefix: "% #{sanitized}%"
+      )
+                           .order(created_at: :desc)
+                           .limit(8)
+                           .pluck(:title)
+    end
+
+    render json: { suggestions: suggestions }
   end
 
   # GET /listings/1 or /listings/1.json

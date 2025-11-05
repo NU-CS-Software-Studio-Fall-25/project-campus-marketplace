@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :listings do
     collection do
       get :mine
+      get :suggestions
     end
   end
   resource :profile, only: %i[show update]
