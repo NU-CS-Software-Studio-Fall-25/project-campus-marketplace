@@ -1,7 +1,8 @@
 <% seller = listing.user %>
 
 <div id="<%= dom_id listing %>" class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out">
-  <%= link_to listing_path(listing), class: "block" do %>
+  <% listing_back_params = request.query_parameters.slice("page", "q").delete_if { |_k, v| v.blank? } %>
+  <%= link_to listing_path(listing, listing_back_params), class: "block" do %>
     <div class="h-48 overflow-hidden">
       <%# Prefer an attached ActiveStorage image, fall back to image_url attribute, then site icon placeholder %>
       <% if defined?(ActiveStorage) && listing.respond_to?(:image) && listing.image.respond_to?(:attached?) && listing.image.attached? %>

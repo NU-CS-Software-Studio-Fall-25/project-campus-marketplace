@@ -3,7 +3,8 @@
 
 <div class="mx-auto mt-8 w-full max-w-6xl">
   <div class="mb-4">
-    <%= link_to listings_path,
+    <% back_params = params.permit(:page, :q).to_h.compact_blank %>
+    <%= link_to listings_path(back_params),
                 class: "inline-flex items-center gap-2 text-sm font-semibold text-blue-600 transition hover:text-blue-700" do %>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
         <path fill-rule="evenodd" d="M11.78 4.22a.75.75 0 010 1.06L8.06 9l3.72 3.72a.75.75 0 11-1.06 1.06l-4.25-4.25a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 0z" clip-rule="evenodd" />
