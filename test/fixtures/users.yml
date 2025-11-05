@@ -6,6 +6,7 @@ one:
   email_address: one@u.northwestern.edu
   username: one
   password_digest: <%= password_digest %>
+  confirmed_at: <%= Time.current %>
 
 two:
   first_name: Two
@@ -13,3 +14,4 @@ two:
   email_address: two@u.northwestern.edu
   username: two
   password_digest: <%= password_digest %>
+  confirmed_at: <%= Time.current %>

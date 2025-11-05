@@ -1,0 +1,6 @@
+<% if pagy.present? && pagy.count.positive? %>
+  <div class="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-600 shadow-sm">
+    Showing <span class="font-semibold text-gray-900"><%= pagy.from %>-<%= pagy.to %></span> of
+    <span class="font-semibold text-gray-900"><%= pagy.count %></span> listings
+  </div>
+<% end %>

@@ -21,7 +21,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_redirected_to profile_url
+    assert_redirected_to new_session_url
   end
 
   test "should reject invalid email domain" do

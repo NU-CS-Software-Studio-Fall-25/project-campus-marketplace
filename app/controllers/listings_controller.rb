@@ -5,22 +5,53 @@ class ListingsController < ApplicationController
   # GET /listings or /listings.json
   def index
     @query = params[:q].to_s.strip
-    @listings = Listing.includes(:user)
-    if @query.present?
-      sanitized = ActiveRecord::Base.sanitize_sql_like(@query)
-      @listings = @listings.where(
-        "title ILIKE :search OR description ILIKE :search",
-        search: "%#{sanitized}%"
-      )
-    end
+    @listings = listings_scope(@query)
     pagy_params = {}
     pagy_params[:q] = @query if @query.present?
     @pagy, @listings = pagy(@listings.order(created_at: :desc), items: 12, params: pagy_params)
+
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   # GET /listings/mine
   def mine
     @listings = Current.user.listings.order(created_at: :desc)
+  end
+
+  def filter
+    query = params[:q].to_s.strip
+    listings = listings_scope(query)
+    pagy_params = {}
+    pagy_params[:q] = query if query.present?
+    pagy, listings = pagy(listings.order(created_at: :desc), items: 12, params: pagy_params)
+
+    pagination_html = pagy.pages > 1 ? view_context.pagy_nav(pagy) : ""
+    summary_html = render_to_string(partial: "listings/summary", locals: { pagy: pagy }, formats: [:html])
+
+    render json: {
+      html: render_to_string(partial: "listings/listings", locals: { listings: listings, query: query }, formats: [:html]),
+      pagination: pagination_html,
+      summary: summary_html
+    }
+  end
+
+  def suggestions
+    query = params[:q].to_s.strip
+    suggestions = []
+
+    if query.present?
+      sanitized = ActiveRecord::Base.sanitize_sql_like(query)
+      suggestions = Listing.where(
+        "title ILIKE :prefix OR title ILIKE :mid_prefix",
+        prefix: "#{sanitized}%",
+        mid_prefix: "% #{sanitized}%"
+      ).order(created_at: :desc).limit(8).pluck(:title)
+    end
+
+    render json: { suggestions: suggestions }
   end
 
   # GET /listings/1 or /listings/1.json
@@ -97,5 +128,18 @@ class ListingsController < ApplicationController
       listing_params.tap do |attrs|
         attrs.delete(:image) if attrs.key?(:image) && attrs[:image].respond_to?(:blank?) && attrs[:image].blank?
       end
+    end
+
+    def listings_scope(query)
+      scope = Listing.includes(:user)
+
+      return scope unless query.present?
+
+      sanitized = ActiveRecord::Base.sanitize_sql_like(query)
+      scope.where(
+        "title ILIKE :prefix OR title ILIKE :mid_prefix",
+        prefix: "#{sanitized}%",
+        mid_prefix: "% #{sanitized}%"
+      )
     end
 end

@@ -1,0 +1,13 @@
+<% if listings.any? %>
+  <%= render listings %>
+<% else %>
+  <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded-md" role="alert">
+    <% if query.present? %>
+      <p class="font-bold">No matching listings</p>
+      <p>Try a different search term.</p>
+    <% else %>
+      <p class="font-bold">No listings yet</p>
+      <p>Be the first to post a listing!</p>
+    <% end %>
+  </div>
+<% end %>

@@ -5,6 +5,11 @@ class ListingsControllerTest < ActionDispatch::IntegrationTest
     @listing = listings(:one)
     @user = users(:one)
     sign_in_as(@user)
+    @listing.image.attach(
+      io: file_fixture("placeholder.png").open,
+      filename: "placeholder.png",
+      content_type: "image/png"
+    )
   end
 
   test "should get index" do
@@ -19,9 +24,10 @@ class ListingsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create listing" do
     listing_params = { title: "New Listing", description: "Sample description", price: 19.99 }
+    image = fixture_file_upload("placeholder.png", "image/png")
 
     assert_difference("Listing.count") do
-      post listings_url, params: { listing: listing_params }
+      post listings_url, params: { listing: listing_params.merge(image: image) }
     end
 
     assert_redirected_to listing_url(Listing.last)
