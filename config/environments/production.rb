@@ -80,11 +80,12 @@ Rails.application.configure do
   # Disable caching for Action Mailer templates even if Action Controller
   # caching is enabled.
   config.action_mailer.perform_caching = false
+  app_host = ENV.fetch("APP_HOST", "our-campus-marketplace-b756f79f9cee.herokuapp.com")
   config.action_mailer.default_url_options = {
-    host: ENV.fetch("APP_HOST", "example.com"),
+    host: app_host,
     protocol: "https"
   }
-  config.action_mailer.asset_host = "https://#{ENV.fetch("APP_HOST", "example.com")}"
+  config.action_mailer.asset_host = "https://#{app_host}"
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address: ENV.fetch("SMTP_ADDRESS", "smtp.sendgrid.net"),
@@ -110,6 +111,11 @@ Rails.application.configure do
 
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
+
+  config.after_initialize do
+    Rails.application.routes.default_url_options[:host] = app_host
+    Rails.application.routes.default_url_options[:protocol] = "https"
+  end
 
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [
