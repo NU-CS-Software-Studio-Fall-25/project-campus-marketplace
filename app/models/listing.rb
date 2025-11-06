@@ -5,10 +5,21 @@ class Listing < ApplicationRecord
   validates :title, presence: true, length: { maximum: 50 }
   validates :description, presence: true, length: { maximum: 1000 }
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
-  validate :image_presence
+  validate :image_requirements
 
   private
-    def image_presence
-      errors.add(:image, "must be attached") unless image.attached?
+    def image_requirements
+      unless image.attached?
+        errors.add(:image, "must be attached")
+        return
+      end
+
+      unless image.content_type.in?(%w[image/png image/jpeg image/jpg])
+        errors.add(:image, "must be a JPEG or PNG")
+      end
+
+      if image.byte_size > 5.megabytes
+        errors.add(:image, "must be smaller than 5MB")
+      end
     end
 end

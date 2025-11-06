@@ -68,9 +68,11 @@
       <div class="sm:col-span-4">
         <%= form.file_field :image,
                             class: "block w-full text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-gray-100 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-gray-700 hover:file:bg-gray-200",
+                            accept: "image/png,image/jpeg",
                             direct_upload: true,
                             required: !listing.image.attached? %>
-        <% if listing.image.attached? %>
+        <p class="mt-2 text-xs text-gray-500">Upload a JPEG or PNG under 5MB.</p>
+        <% if listing.image.attached? && listing.image.variable? %>
           <div class="mt-4">
             <%= image_tag listing.image.variant(resize_to_limit: [150, 150]), class: "h-24 w-24 rounded-md object-cover" %>
           </div>

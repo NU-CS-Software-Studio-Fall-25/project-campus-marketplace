@@ -5,7 +5,11 @@
   <%= link_to listing_path(listing, listing_back_params), class: "block" do %>
     <div class="h-48 overflow-hidden">
       <%# Prefer an attached ActiveStorage image, fall back to image_url attribute, then site icon placeholder %>
-      <% if defined?(ActiveStorage) && listing.respond_to?(:image) && listing.image.respond_to?(:attached?) && listing.image.attached? %>
+      <% if defined?(ActiveStorage) &&
+            listing.respond_to?(:image) &&
+            listing.image.respond_to?(:attached?) &&
+            listing.image.attached? &&
+            listing.image.variable? %>
         <%= image_tag listing.image.variant(resize_to_fill: [400, 300]), alt: listing.title, class: "w-full h-full object-cover" %>
       <% elsif listing.respond_to?(:image_url) && listing.image_url.present? %>
         <%= image_tag listing.image_url, alt: listing.title, class: "w-full h-full object-cover" %>
