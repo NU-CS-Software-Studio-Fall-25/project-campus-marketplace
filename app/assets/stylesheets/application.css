@@ -17,7 +17,7 @@
 /* Custom styles for Milestone 0 UI polish */
 
 body {
-	padding-bottom: 3rem;
+	padding-bottom: 0;
 	background: #f8f9fa; /* light gray */
 	color: #212529;
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
@@ -129,5 +129,4 @@ body {
 @media (max-width: 768px) {
 	.listing-image { height: 140px; }
 }
-
 
