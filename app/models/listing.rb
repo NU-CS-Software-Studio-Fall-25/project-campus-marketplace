@@ -2,9 +2,17 @@ class Listing < ApplicationRecord
   belongs_to :user
   has_one_attached :image
 
+  enum :category, {
+    electronics: "electronics",
+    clothing: "clothing",
+    furniture: "furniture",
+    other: "other"
+  }
+
   validates :title, presence: true, length: { maximum: 50 }
   validates :description, presence: true, length: { maximum: 1000 }
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 10000000 }
+  validates :category, inclusion: { in: categories.keys }
   validate :image_requirements
 
   private

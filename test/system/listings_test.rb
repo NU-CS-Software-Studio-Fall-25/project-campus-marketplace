@@ -20,6 +20,7 @@ class ListingsTest < ApplicationSystemTestCase
     fill_in "Description", with: @listing.description
     fill_in "Price", with: @listing.price
     fill_in "Title", with: @listing.title
+    select "Electronics", from: "Category"
     click_on "Create Listing"
 
     assert_text "Listing was successfully created."
@@ -33,6 +34,7 @@ class ListingsTest < ApplicationSystemTestCase
     fill_in "Description", with: "Updated description"
     fill_in "Price", with: @listing.price
     fill_in "Title", with: @listing.title
+    select "Furniture", from: "Category"
     click_on "Update Listing"
 
     assert_text "Listing was successfully updated."
@@ -57,5 +59,16 @@ class ListingsTest < ApplicationSystemTestCase
 
     assert_text "Calculus Textbook"
     assert_no_text "MacBook Pro"
+  end
+
+  test "category filter limits listings" do
+    sign_in_as(@user)
+    visit listings_url
+
+    uncheck "Electronics"
+    click_on "Search"
+
+    assert_no_text "Calculus Textbook"
+    assert_text "MacBook Pro"
   end
 end

@@ -5,9 +5,11 @@ class ListingsController < ApplicationController
   # GET /listings or /listings.json
   def index
     @query = params[:q].to_s.strip
-    @listings = listings_scope(@query)
+    @selected_categories = normalize_categories(params[:categories])
+    @listings = listings_scope(@query, @selected_categories)
     pagy_params = {}
     pagy_params[:q] = @query if @query.present?
+    pagy_params[:categories] = @selected_categories if @selected_categories.present?
     @pagy, @listings = pagy(@listings.order(created_at: :desc), items: 12, params: pagy_params)
 
     respond_to do |format|
@@ -23,9 +25,11 @@ class ListingsController < ApplicationController
 
   def filter
     query = params[:q].to_s.strip
-    listings = listings_scope(query)
+    selected_categories = normalize_categories(params[:categories])
+    listings = listings_scope(query, selected_categories)
     pagy_params = {}
     pagy_params[:q] = query if query.present?
+    pagy_params[:categories] = selected_categories if selected_categories.present?
     pagy, listings = pagy(listings.order(created_at: :desc), items: 12, params: pagy_params)
 
     pagination_html = pagy.pages > 1 ? view_context.pagy_nav(pagy) : ""
@@ -40,11 +44,12 @@ class ListingsController < ApplicationController
 
   def suggestions
     query = params[:q].to_s.strip
+    selected_categories = normalize_categories(params[:categories])
     suggestions = []
 
     if query.present?
       sanitized = ActiveRecord::Base.sanitize_sql_like(query)
-      suggestions = Listing.where(
+      suggestions = Listing.where(category: selected_categories).where(
         "title ILIKE :prefix OR title ILIKE :mid_prefix",
         prefix: "#{sanitized}%",
         mid_prefix: "% #{sanitized}%"
@@ -60,7 +65,7 @@ class ListingsController < ApplicationController
 
   # GET /listings/new
   def new
-    @listing = Current.user.listings.build
+    @listing = Current.user.listings.build(category: :other)
   end
 
   # GET /listings/1/edit
@@ -121,7 +126,7 @@ class ListingsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def listing_params
-      @listing_params ||= params.require(:listing).permit(:title, :description, :price, :image)
+      @listing_params ||= params.require(:listing).permit(:title, :description, :price, :image, :category)
     end
 
     def listing_attributes
@@ -130,8 +135,9 @@ class ListingsController < ApplicationController
       end
     end
 
-    def listings_scope(query)
+    def listings_scope(query, categories)
       scope = Listing.includes(:user)
+      scope = scope.where(category: categories) if categories.present?
 
       return scope unless query.present?
 
@@ -141,5 +147,11 @@ class ListingsController < ApplicationController
         prefix: "#{sanitized}%",
         mid_prefix: "% #{sanitized}%"
       )
+    end
+
+    def normalize_categories(raw_categories)
+      categories = Array(raw_categories).map { |category| category.to_s.presence }.compact
+      categories = Listing.categories.keys if categories.empty?
+      (categories & Listing.categories.keys).presence || Listing.categories.keys
     end
 end

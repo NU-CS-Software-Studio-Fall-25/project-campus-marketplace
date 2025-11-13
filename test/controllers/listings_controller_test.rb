@@ -23,7 +23,7 @@ class ListingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create listing" do
-    listing_params = { title: "New Listing", description: "Sample description", price: 19.99 }
+    listing_params = { title: "New Listing", description: "Sample description", price: 19.99, category: "electronics" }
     image = fixture_file_upload("placeholder.png", "image/png")
 
     assert_difference("Listing.count") do
@@ -45,10 +45,11 @@ class ListingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update listing" do
-    patch listing_url(@listing), params: { listing: { description: "Updated description" } }
+    patch listing_url(@listing), params: { listing: { description: "Updated description", category: "furniture" } }
     assert_redirected_to listing_url(@listing)
     @listing.reload
     assert_equal "Updated description", @listing.description
+    assert_equal "furniture", @listing.category
   end
 
   test "should destroy listing" do
@@ -57,5 +58,12 @@ class ListingsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to mine_listings_url
+  end
+
+  test "index filters by category" do
+    get listings_url, params: { categories: ["electronics"] }
+    assert_response :success
+    assert_match(/Calculus Textbook/, @response.body)
+    assert_no_match(/MacBook Pro/, @response.body)
   end
 end

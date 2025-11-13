@@ -63,6 +63,19 @@
 
     <div class="grid grid-cols-1 gap-y-2 gap-x-4 sm:grid-cols-6">
       <div class="sm:col-span-2">
+        <%= form.label :category, class: "block text-sm font-medium text-gray-700 pt-2" %>
+      </div>
+      <div class="sm:col-span-4">
+        <%= form.select :category,
+                        Listing.categories.keys.map { |category| [category.titleize, category] },
+                        {},
+                        class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+                        required: true %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-y-2 gap-x-4 sm:grid-cols-6">
+      <div class="sm:col-span-2">
         <%= form.label :image, class: "block text-sm font-medium text-gray-700 pt-2" %>
       </div>
       <div class="sm:col-span-4">
