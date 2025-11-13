@@ -49,8 +49,41 @@ When("I create a listing with the following details:") do |table|
   attach_file("listing_image", Rails.root.join("test/fixtures/files/placeholder.png"))
 
   click_button "Create Listing"
+  @created_listing = @current_user.listings.order(created_at: :desc).first
 end
+
+
 
 Then("I should see {string}") do |text|
   expect(page).to have_content(text)
+end
+Given("I have created a listing with the following details:") do |table|
+  step("I create a listing with the following details:", table)
+  @created_listing = @current_user.listings.order(created_at: :desc).first
+end
+
+
+
+Then("I should see a button to delete the listing on the all listings page") do
+  visit listings_path
+  within("##{ActionView::RecordIdentifier.dom_id(@created_listing)}") do
+    expect(page).to have_button("Delete", exact: true)
+  end
+end
+
+When("I click the delete button for that listing") do
+  visit listings_path
+  within("##{dom_id(@created_listing)}") do
+    click_button "Delete", exact: true
+  end
+end
+
+
+
+When("Once I click that button I should receive a notification that my listing was deleted") do
+  within("##{ActionView::RecordIdentifier.dom_id(@created_listing)}") do
+    accept_confirm { click_button "Delete", exact: true }
+  end
+  expect(page).to have_current_path(mine_listings_path)
+  expect(page).to have_content("Listing was successfully destroyed.")
 end
