@@ -1,5 +1,6 @@
 require "securerandom"
 require "rspec/expectations"
+require "action_view/record_identifier"
 
 module RouteHelpers
   include Rails.application.routes.url_helpers
@@ -11,6 +12,7 @@ end
 
 World(RouteHelpers)
 World(RSpec::Matchers)
+World(ActionView::RecordIdentifier)
 
 Given("I am a confirmed user") do
   suffix = SecureRandom.hex(4)
@@ -38,6 +40,7 @@ end
 
 When("I create a listing with the following details:") do |table|
   details = table.rows_hash
+  category_label = (details["Category"] || "Other").to_s.titleize
 
   visit mine_listings_path
   click_link "New listing"
@@ -45,6 +48,7 @@ When("I create a listing with the following details:") do |table|
   fill_in "Title", with: details.fetch("Title")
   fill_in "Description", with: details.fetch("Description")
   fill_in "Price", with: details.fetch("Price")
+  select category_label, from: "Category"
 
   attach_file("listing_image", Rails.root.join("test/fixtures/files/placeholder.png"))
 
@@ -52,21 +56,21 @@ When("I create a listing with the following details:") do |table|
   @created_listing = @current_user.listings.order(created_at: :desc).first
 end
 
-
+Given("I have created a listing with the following details:") do |table|
+  step("I create a listing with the following details:", table)
+end
 
 Then("I should see {string}") do |text|
   expect(page).to have_content(text)
 end
-Given("I have created a listing with the following details:") do |table|
-  step("I create a listing with the following details:", table)
-  @created_listing = @current_user.listings.order(created_at: :desc).first
+
+Then("I should not see {string}") do |text|
+  expect(page).not_to have_content(text)
 end
-
-
 
 Then("I should see a button to delete the listing on the all listings page") do
   visit listings_path
-  within("##{ActionView::RecordIdentifier.dom_id(@created_listing)}") do
+  within("##{dom_id(@created_listing)}") do
     expect(page).to have_button("Delete", exact: true)
   end
 end
@@ -78,12 +82,20 @@ When("I click the delete button for that listing") do
   end
 end
 
+When("I filter listings by category {string}") do |category|
+  visit listings_path
+  target_label = category.to_s.titleize
 
+  Listing.categories.keys.each do |key|
+    label = key.titleize
+    next unless page.has_field?(label, type: "checkbox")
 
-When("Once I click that button I should receive a notification that my listing was deleted") do
-  within("##{ActionView::RecordIdentifier.dom_id(@created_listing)}") do
-    accept_confirm { click_button "Delete", exact: true }
+    if label.casecmp?(target_label)
+      check(label, allow_label_click: true)
+    else
+      uncheck(label, allow_label_click: true)
+    end
   end
-  expect(page).to have_current_path(mine_listings_path)
-  expect(page).to have_content("Listing was successfully destroyed.")
+
+  click_button "Search"
 end

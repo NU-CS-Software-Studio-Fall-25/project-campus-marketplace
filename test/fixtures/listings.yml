@@ -5,9 +5,11 @@ one:
   description: Latest edition, no markings.
   price: 40.0
   user: one
+  category: electronics
 
 two:
   title: MacBook Pro
   description: 13-inch, 8GB RAM, 256GB SSD.
   price: 800.0
   user: two
+  category: furniture

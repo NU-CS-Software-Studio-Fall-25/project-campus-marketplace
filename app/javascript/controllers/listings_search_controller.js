@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import debounce from "helpers/debounce"
 
 export default class extends Controller {
-  static targets = ["form", "input", "results", "suggestions", "pagination", "summary"]
+  static targets = ["form", "input", "results", "suggestions", "pagination", "summary", "category", "filtersPanel", "filtersButton"]
   static values = {
     resultsUrl: String,
     suggestionsUrl: String
@@ -11,10 +11,12 @@ export default class extends Controller {
   connect() {
     this.debouncedFetch = debounce(this.fetchUpdates.bind(this), 200)
     this.currentResultsRequest = null
+    this.handleOutsideClick = this.handleOutsideClick.bind(this)
   }
 
   disconnect() {
     this.abortResultsRequest()
+    document.removeEventListener("click", this.handleOutsideClick)
   }
 
   update() {
@@ -28,8 +30,9 @@ export default class extends Controller {
 
   fetchUpdates() {
     const query = this.inputTarget.value.trim()
-    this.fetchResults(query)
-    this.fetchSuggestions(query)
+    const categories = this.selectedCategories()
+    this.fetchResults(query, categories)
+    this.fetchSuggestions(query, categories)
   }
 
   applySuggestion(event) {
@@ -38,8 +41,8 @@ export default class extends Controller {
     this.fetchUpdates()
   }
 
-  fetchResults(query) {
-    const url = this.buildUrl(this.resultsUrlValue, query)
+  fetchResults(query, categories) {
+    const url = this.buildUrl(this.resultsUrlValue, query, categories)
 
     this.abortResultsRequest()
     this.currentResultsRequest = new AbortController()
@@ -72,13 +75,13 @@ export default class extends Controller {
     this.summaryTarget.classList.toggle("hidden", !summary)
   }
 
-  fetchSuggestions(query) {
+  fetchSuggestions(query, categories) {
     if (!query) {
       this.hideSuggestions()
       return
     }
 
-    const url = this.buildUrl(this.suggestionsUrlValue, query)
+    const url = this.buildUrl(this.suggestionsUrlValue, query, categories)
 
     fetch(url, { headers: { Accept: "application/json" } })
       .then((response) => {
@@ -123,7 +126,7 @@ export default class extends Controller {
     }
   }
 
-  buildUrl(base, query) {
+  buildUrl(base, query, categories = []) {
     const url = new URL(base, window.location.origin)
 
     if (query) {
@@ -132,7 +135,49 @@ export default class extends Controller {
       url.searchParams.delete("q")
     }
 
+    url.searchParams.delete("categories[]")
+    if (categories.length) {
+      categories.forEach((category) => url.searchParams.append("categories[]", category))
+    }
+
     url.searchParams.delete("page")
     return url.toString()
+  }
+
+  selectedCategories() {
+    if (!this.hasCategoryTarget) return []
+
+    const checked = this.categoryTargets.filter((target) => target.checked)
+    return checked.map((target) => target.value)
+  }
+
+  toggleFilters(event) {
+    event.preventDefault()
+    if (!this.hasFiltersPanelTarget) return
+
+    if (this.filtersPanelTarget.classList.contains("hidden")) {
+      this.filtersPanelTarget.classList.remove("hidden")
+      requestAnimationFrame(() => document.addEventListener("click", this.handleOutsideClick))
+    } else {
+      this.closeFiltersPanel()
+    }
+  }
+
+  handleOutsideClick(event) {
+    if (!this.hasFiltersPanelTarget) return
+
+    const clickedInsidePanel = this.filtersPanelTarget.contains(event.target)
+    const clickedButton = this.hasFiltersButtonTarget && this.filtersButtonTarget.contains(event.target)
+
+    if (!clickedInsidePanel && !clickedButton) {
+      this.closeFiltersPanel()
+    }
+  }
+
+  closeFiltersPanel() {
+    if (!this.hasFiltersPanelTarget) return
+
+    this.filtersPanelTarget.classList.add("hidden")
+    document.removeEventListener("click", this.handleOutsideClick)
   }
 }
