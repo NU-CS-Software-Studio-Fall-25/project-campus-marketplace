@@ -51,6 +51,9 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # Cucumber BDD support
+  gem "cucumber-rails", "~> 3.0", require: false
 end
 
 group :development do
@@ -63,4 +66,6 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "faker"
+  gem "database_cleaner-active_record", "~> 2.0"
+  gem 'rspec-expectations'
 end
