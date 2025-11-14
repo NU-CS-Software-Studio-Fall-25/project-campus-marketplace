@@ -53,7 +53,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   # Cucumber BDD support
-  gem "cucumber-rails", "~> 3.0", require: false
+  gem "cucumber-rails", "~> 4.0", require: false
 end
 
 group :development do
