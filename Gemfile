@@ -40,7 +40,7 @@ gem "aws-sdk-s3", "~> 1.150", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
-gem "pagy", "~> 6.5"
+gem "pagy", "~> 43.0"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
