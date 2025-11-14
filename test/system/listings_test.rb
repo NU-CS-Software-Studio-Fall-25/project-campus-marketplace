@@ -65,7 +65,20 @@ class ListingsTest < ApplicationSystemTestCase
     sign_in_as(@user)
     visit listings_url
 
-    uncheck "Electronics"
+    click_on "Filters"
+    check "Furniture"
+    click_on "Search"
+
+    assert_no_text "Calculus Textbook"
+    assert_text "MacBook Pro"
+  end
+
+  test "price range filter limits listings" do
+    sign_in_as(@user)
+    visit listings_url
+
+    click_on "Filters"
+    check "Over $100"
     click_on "Search"
 
     assert_no_text "Calculus Textbook"

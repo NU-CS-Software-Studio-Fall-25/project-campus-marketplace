@@ -1,15 +1,28 @@
 class ListingsController < ApplicationController
+  PRICE_RANGES = {
+    "free" => { label: "Free", min: 0, max: 0 },
+    "under_25" => { label: "Under $25", min: 0, min_comparison: ">", max: 25 },
+    "25_to_100" => { label: "$25 - $100", min: 25, min_comparison: ">", max: 100 },
+    "over_100" => { label: "Over $100", min: 100, min_comparison: ">" }
+  }.freeze
+
+  helper_method :price_range_options
+
   before_action :set_listing, only: :show
   before_action :set_owned_listing, only: %i[ edit update destroy ]
 
   # GET /listings or /listings.json
   def index
     @query = params[:q].to_s.strip
+    @category_filters = extract_categories(params[:categories])
+    @price_range_filters = extract_price_ranges(params[:price_ranges])
     @selected_categories = normalize_categories(params[:categories])
-    @listings = listings_scope(@query, @selected_categories)
+    @selected_price_ranges = normalize_price_ranges(params[:price_ranges])
+    @listings = listings_scope(@query, @selected_categories, @selected_price_ranges)
     pagy_params = {}
     pagy_params[:q] = @query if @query.present?
     pagy_params[:categories] = @selected_categories if @selected_categories.present?
+    pagy_params[:price_ranges] = @selected_price_ranges if @selected_price_ranges.present?
     @pagy, @listings = pagy(@listings.order(created_at: :desc), items: 12, params: pagy_params)
 
     respond_to do |format|
@@ -26,10 +39,12 @@ class ListingsController < ApplicationController
   def filter
     query = params[:q].to_s.strip
     selected_categories = normalize_categories(params[:categories])
-    listings = listings_scope(query, selected_categories)
+    selected_price_ranges = normalize_price_ranges(params[:price_ranges])
+    listings = listings_scope(query, selected_categories, selected_price_ranges)
     pagy_params = {}
     pagy_params[:q] = query if query.present?
     pagy_params[:categories] = selected_categories if selected_categories.present?
+    pagy_params[:price_ranges] = selected_price_ranges if selected_price_ranges.present?
     pagy, listings = pagy(listings.order(created_at: :desc), items: 12, params: pagy_params)
 
     pagination_html = pagy.pages > 1 ? view_context.pagy_nav(pagy) : ""
@@ -45,15 +60,13 @@ class ListingsController < ApplicationController
   def suggestions
     query = params[:q].to_s.strip
     selected_categories = normalize_categories(params[:categories])
+    selected_price_ranges = normalize_price_ranges(params[:price_ranges])
+
     suggestions = []
 
     if query.present?
-      sanitized = ActiveRecord::Base.sanitize_sql_like(query)
-      suggestions = Listing.where(category: selected_categories).where(
-        "title ILIKE :prefix OR title ILIKE :mid_prefix",
-        prefix: "#{sanitized}%",
-        mid_prefix: "% #{sanitized}%"
-      ).order(created_at: :desc).limit(8).pluck(:title)
+      scope = listings_scope(query, selected_categories, selected_price_ranges)
+      suggestions = scope.order(created_at: :desc).limit(8).pluck(:title)
     end
 
     render json: { suggestions: suggestions }
@@ -114,6 +127,10 @@ class ListingsController < ApplicationController
     end
   end
 
+  def price_range_options
+    PRICE_RANGES
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_listing
@@ -135,9 +152,10 @@ class ListingsController < ApplicationController
       end
     end
 
-    def listings_scope(query, categories)
+    def listings_scope(query, categories, price_ranges)
       scope = Listing.includes(:user)
       scope = scope.where(category: categories) if categories.present?
+      scope = apply_price_filter(scope, price_ranges)
 
       return scope unless query.present?
 
@@ -150,8 +168,57 @@ class ListingsController < ApplicationController
     end
 
     def normalize_categories(raw_categories)
-      categories = Array(raw_categories).map { |category| category.to_s.presence }.compact
-      categories = Listing.categories.keys if categories.empty?
-      (categories & Listing.categories.keys).presence || Listing.categories.keys
+      categories = extract_categories(raw_categories)
+      categories.presence || Listing.categories.keys
+    end
+
+    def normalize_price_ranges(raw_ranges)
+      ranges = extract_price_ranges(raw_ranges)
+      ranges.presence || PRICE_RANGES.keys
+    end
+
+    def apply_price_filter(scope, price_ranges)
+      selected = Array(price_ranges) & PRICE_RANGES.keys
+      return scope if selected.empty? || selected.length == PRICE_RANGES.length
+
+      clauses = []
+      values = {}
+
+      selected.each_with_index do |key, index|
+        range = PRICE_RANGES[key]
+        next unless range
+
+        clause_parts = []
+
+        if range.key?(:min)
+          comparator = range[:min_comparison] || ">="
+          min_key = :"min_#{index}"
+          clause_parts << "price #{comparator} :#{min_key}"
+          values[min_key] = range[:min]
+        end
+
+        if range.key?(:max)
+          comparator = range[:max_comparison] || "<="
+          max_key = :"max_#{index}"
+          clause_parts << "price #{comparator} :#{max_key}"
+          values[max_key] = range[:max]
+        end
+
+        next if clause_parts.empty?
+
+        clauses << "(#{clause_parts.join(" AND ")})"
+      end
+
+      return scope if clauses.empty?
+
+      scope.where(clauses.join(" OR "), values)
+    end
+
+    def extract_categories(raw_categories)
+      Array(raw_categories).map { |category| category.to_s.presence }.compact & Listing.categories.keys
+    end
+
+    def extract_price_ranges(raw_ranges)
+      Array(raw_ranges).map { |range| range.to_s.presence }.compact & PRICE_RANGES.keys
     end
 end

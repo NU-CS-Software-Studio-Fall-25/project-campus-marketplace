@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import debounce from "helpers/debounce"
 
 export default class extends Controller {
-  static targets = ["form", "input", "results", "suggestions", "pagination", "summary", "category", "filtersPanel", "filtersButton"]
+  static targets = ["form", "input", "results", "suggestions", "pagination", "summary", "category", "priceRange", "filtersPanel", "filtersButton"]
   static values = {
     resultsUrl: String,
     suggestionsUrl: String
@@ -31,8 +31,9 @@ export default class extends Controller {
   fetchUpdates() {
     const query = this.inputTarget.value.trim()
     const categories = this.selectedCategories()
-    this.fetchResults(query, categories)
-    this.fetchSuggestions(query, categories)
+    const priceRanges = this.selectedPriceRanges()
+    this.fetchResults(query, categories, priceRanges)
+    this.fetchSuggestions(query, categories, priceRanges)
   }
 
   applySuggestion(event) {
@@ -41,8 +42,8 @@ export default class extends Controller {
     this.fetchUpdates()
   }
 
-  fetchResults(query, categories) {
-    const url = this.buildUrl(this.resultsUrlValue, query, categories)
+  fetchResults(query, categories, priceRanges) {
+    const url = this.buildUrl(this.resultsUrlValue, query, categories, priceRanges)
 
     this.abortResultsRequest()
     this.currentResultsRequest = new AbortController()
@@ -75,13 +76,13 @@ export default class extends Controller {
     this.summaryTarget.classList.toggle("hidden", !summary)
   }
 
-  fetchSuggestions(query, categories) {
+  fetchSuggestions(query, categories, priceRanges) {
     if (!query) {
       this.hideSuggestions()
       return
     }
 
-    const url = this.buildUrl(this.suggestionsUrlValue, query, categories)
+    const url = this.buildUrl(this.suggestionsUrlValue, query, categories, priceRanges)
 
     fetch(url, { headers: { Accept: "application/json" } })
       .then((response) => {
@@ -126,7 +127,7 @@ export default class extends Controller {
     }
   }
 
-  buildUrl(base, query, categories = []) {
+  buildUrl(base, query, categories = [], priceRanges = []) {
     const url = new URL(base, window.location.origin)
 
     if (query) {
@@ -140,6 +141,11 @@ export default class extends Controller {
       categories.forEach((category) => url.searchParams.append("categories[]", category))
     }
 
+    url.searchParams.delete("price_ranges[]")
+    if (priceRanges.length) {
+      priceRanges.forEach((range) => url.searchParams.append("price_ranges[]", range))
+    }
+
     url.searchParams.delete("page")
     return url.toString()
   }
@@ -148,6 +154,13 @@ export default class extends Controller {
     if (!this.hasCategoryTarget) return []
 
     const checked = this.categoryTargets.filter((target) => target.checked)
+    return checked.map((target) => target.value)
+  }
+
+  selectedPriceRanges() {
+    if (!this.hasPriceRangeTarget) return []
+
+    const checked = this.priceRangeTargets.filter((target) => target.checked)
     return checked.map((target) => target.value)
   }
 
