@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import debounce from "helpers/debounce"
 
 export default class extends Controller {
-  static targets = ["form", "input", "results", "suggestions", "pagination", "summary", "category", "priceRange", "filtersPanel", "filtersButton"]
+  static targets = ["form", "input", "results", "suggestions", "pagination", "summary", "category", "priceRange"]
   static values = {
     resultsUrl: String,
     suggestionsUrl: String
@@ -11,12 +11,10 @@ export default class extends Controller {
   connect() {
     this.debouncedFetch = debounce(this.fetchUpdates.bind(this), 200)
     this.currentResultsRequest = null
-    this.handleOutsideClick = this.handleOutsideClick.bind(this)
   }
 
   disconnect() {
     this.abortResultsRequest()
-    document.removeEventListener("click", this.handleOutsideClick)
   }
 
   update() {
@@ -162,35 +160,5 @@ export default class extends Controller {
 
     const checked = this.priceRangeTargets.filter((target) => target.checked)
     return checked.map((target) => target.value)
-  }
-
-  toggleFilters(event) {
-    event.preventDefault()
-    if (!this.hasFiltersPanelTarget) return
-
-    if (this.filtersPanelTarget.classList.contains("hidden")) {
-      this.filtersPanelTarget.classList.remove("hidden")
-      requestAnimationFrame(() => document.addEventListener("click", this.handleOutsideClick))
-    } else {
-      this.closeFiltersPanel()
-    }
-  }
-
-  handleOutsideClick(event) {
-    if (!this.hasFiltersPanelTarget) return
-
-    const clickedInsidePanel = this.filtersPanelTarget.contains(event.target)
-    const clickedButton = this.hasFiltersButtonTarget && this.filtersButtonTarget.contains(event.target)
-
-    if (!clickedInsidePanel && !clickedButton) {
-      this.closeFiltersPanel()
-    }
-  }
-
-  closeFiltersPanel() {
-    if (!this.hasFiltersPanelTarget) return
-
-    this.filtersPanelTarget.classList.add("hidden")
-    document.removeEventListener("click", this.handleOutsideClick)
   }
 }
