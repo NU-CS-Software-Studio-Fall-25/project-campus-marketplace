@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema[8.0].define(version: 2025_11_17_004023) do
-=======
-ActiveRecord::Schema[8.0].define(version: 2025_11_16_220000) do
->>>>>>> 986bd5581d4b18be383213a2fcf9f7e5c409c234
   create_schema "_heroku"
 
   # These are extensions that must be enabled in order to support this database
