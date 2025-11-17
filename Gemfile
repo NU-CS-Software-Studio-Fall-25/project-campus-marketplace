@@ -41,6 +41,9 @@ gem "aws-sdk-s3", "~> 1.150", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
 gem "pagy", "~> 6.5"
+gem "omniauth"
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection"
 
 # OpenAI for AI-powered image analysis and description generation
 gem "ruby-openai", "~> 7.0"
@@ -73,5 +76,5 @@ group :test do
   gem "selenium-webdriver"
   gem "faker"
   gem "database_cleaner-active_record", "~> 2.0"
-  gem 'rspec-expectations'
+  gem "rspec-expectations"
 end

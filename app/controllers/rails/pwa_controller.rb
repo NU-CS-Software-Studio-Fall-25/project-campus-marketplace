@@ -1,5 +1,6 @@
 module Rails
   class PwaController < ApplicationController
+    allow_unauthenticated_access only: %i[manifest service_worker]
     skip_forgery_protection
     layout false
 
