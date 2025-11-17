@@ -11,6 +11,54 @@ class ListingsController < ApplicationController
   before_action :set_listing, only: :show
   before_action :set_owned_listing, only: %i[ edit update destroy ]
 
+  # POST /listings/generate_description
+  def generate_description
+    signed_id = params[:signed_id]
+    
+    if signed_id.blank?
+      return render json: { error: "No image provided" }, status: :unprocessable_entity
+    end
+
+    # Check if feature is enabled
+    unless Rails.application.config.ai_description_enabled
+      return render json: { 
+        error: "AI description generation is currently unavailable. Please enter a description manually.",
+        disabled: true
+      }, status: :service_unavailable
+    end
+
+    # Check rate limit before processing
+    limit = Rails.application.config.ai_description_rate_limit
+    remaining = RateLimiter.remaining("ai_description", limit, 3600)
+    
+    if remaining <= 0
+      return render json: { 
+        error: "AI description limit reached. Please try again later or enter a description manually.",
+        rate_limited: true
+      }, status: :too_many_requests
+    end
+
+    blob = ActiveStorage::Blob.find_signed(signed_id)
+    description = ImageAnalyzerService.new(blob).generate_description
+
+    if description.present?
+      render json: { 
+        description: description,
+        remaining_generations: remaining - 1
+      }
+    else
+      render json: { 
+        error: "Could not generate description. Please try again or enter manually.",
+        remaining_generations: remaining
+      }, status: :unprocessable_entity
+    end
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Image not found" }, status: :not_found
+  rescue StandardError => e
+    Rails.logger.error "Generate description error: #{e.message}"
+    render json: { error: "An error occurred while generating the description" }, status: :internal_server_error
+  end
+
   # GET /listings or /listings.json
   def index
     @query = params[:q].to_s.strip

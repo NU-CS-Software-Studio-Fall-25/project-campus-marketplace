@@ -1,4 +1,9 @@
-<%= form_with(model: listing, class: "space-y-8") do |form| %>
+<%= form_with(model: listing, 
+              class: "space-y-8",
+              data: { 
+                controller: "image-description",
+                image_description_generate_url_value: generate_description_listings_path
+              }) do |form| %>
   <% if listing.errors.any? %>
     <div role="alert" class="rounded border-l-4 border-red-500 bg-red-100 p-4 text-red-700">
       <p class="font-bold"><%= pluralize(listing.errors.count, "error") %> prohibited this listing from being saved:</p>
@@ -33,9 +38,20 @@
                            id: "Description",
                            rows: 4,
                            class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
-                           placeholder: "Share a short description so buyers know what to expect.",
+                           placeholder: "Upload an image to auto-generate a description, or write your own.",
                            maxlength: 1000,
-                           required: true %>
+                           required: true,
+                           data: { image_description_target: "descriptionField" } %>
+        <div class="mt-2 flex items-center justify-between">
+          <p class="text-xs text-gray-500">AI will auto-generate this when you upload an image.</p>
+          <button type="button"
+                  class="text-xs text-indigo-600 hover:text-indigo-800 underline hidden"
+                  data-image-description-target="generateButton"
+                  data-action="click->image-description#regenerate">
+            ↻ Regenerate with AI
+          </button>
+        </div>
+        <p class="mt-1 text-sm hidden" data-image-description-target="statusMessage"></p>
       </div>
     </div>
 
@@ -83,8 +99,11 @@
                             class: "block w-full text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-gray-100 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-gray-700 hover:file:bg-gray-200",
                             accept: "image/png,image/jpeg",
                             direct_upload: true,
-                            required: !listing.image.attached? %>
-        <p class="mt-2 text-xs text-gray-500">Upload a JPEG or PNG under 5MB.</p>
+                            required: !listing.image.attached?,
+                            data: { 
+                              image_description_target: "imageInput"
+                            } %>
+        <p class="mt-2 text-xs text-gray-500">Upload a JPEG or PNG under 5MB. AI will analyze it and suggest a description.</p>
         <% if listing.image.attached? && listing.image.variable? %>
           <div class="mt-4">
             <%= image_tag listing.image.variant(resize_to_limit: [150, 150]), class: "h-24 w-24 rounded-md object-cover" %>

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       get :mine
       get :filter
       get :suggestions
+      post :generate_description
     end
   end
   resource :profile, only: %i[show update]

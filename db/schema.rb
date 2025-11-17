@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_13_192029) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_17_004023) do
   create_schema "_heroku"
 
   # These are extensions that must be enabled in order to support this database
@@ -31,7 +31,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_13_192029) do
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
-    t.text "metadata", null: false
+    t.text "metadata"
     t.string "service_name", null: false
     t.bigint "byte_size", null: false
     t.string "checksum"
