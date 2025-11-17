@@ -39,15 +39,16 @@ class ListingsController < ApplicationController
     end
 
     blob = ActiveStorage::Blob.find_signed(signed_id)
-    description = ImageAnalyzerService.new(blob).generate_description
+    result = ImageAnalyzerService.new(blob).generate_description
 
-    if description.present?
-      render json: { 
-        description: description,
+    if result.present? && result[:description].present?
+      render json: {
+        description: result[:description],
+        category: result[:category],
         remaining_generations: remaining - 1
       }
     else
-      render json: { 
+      render json: {
         error: "Could not generate description. Please try again or enter manually.",
         remaining_generations: remaining
       }, status: :unprocessable_entity
