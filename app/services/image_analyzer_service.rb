@@ -115,13 +115,19 @@ class ImageAnalyzerService
   def parse_response(raw_content)
     return { description: nil, category: nil } if raw_content.blank?
 
-    data = JSON.parse(raw_content)
+    cleaned = extract_json_payload(raw_content)
+    data = JSON.parse(cleaned)
     description = data["description"].to_s.strip
     category = normalize_category(data["category"])
     { description: description, category: category }
   rescue JSON::ParserError
     Rails.logger.warn "ImageAnalyzerService received unparseable response: #{raw_content}"
-    { description: raw_content.to_s.strip.presence, category: nil }
+    fallback_description = extract_description_from_text(raw_content) || raw_content.to_s.strip.presence
+    fallback_category = extract_category_from_text(raw_content)
+    {
+      description: fallback_description,
+      category: fallback_category
+    }
   end
 
   def normalize_cached_result(value)
@@ -143,6 +149,33 @@ class ImageAnalyzerService
     normalized = value.to_s.downcase
     return nil if normalized.blank?
     allowed.include?(normalized) ? normalized : "other"
+  end
+
+  def extract_json_payload(content)
+    stripped = content.to_s.strip
+    return stripped if stripped.start_with?("{") && stripped.end_with?("}")
+
+    start_index = stripped.index("{")
+    end_index = stripped.rindex("}")
+    if start_index && end_index && end_index >= start_index
+      stripped[start_index..end_index]
+    else
+      stripped
+    end
+  end
+
+  def extract_category_from_text(content)
+    match = content.to_s.match(/"category"\s*:\s*"([^"]+)"/i)
+    return normalize_category(match[1]) if match
+
+    nil
+  end
+
+  def extract_description_from_text(content)
+    match = content.to_s.match(/"description"\s*:\s*"([^"]+)"/im)
+    return match[1].strip if match
+
+    nil
   end
 
   def openai_api_key
