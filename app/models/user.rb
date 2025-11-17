@@ -4,6 +4,8 @@ class User < ApplicationRecord
   has_secure_password
   has_many :sessions, dependent: :destroy
   has_many :listings, dependent: :destroy
+  has_many :favorites, dependent: :destroy
+  has_many :liked_listings, through: :favorites, source: :listing
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
   normalizes :username, with: ->(name) { name.strip.downcase }
@@ -25,6 +27,10 @@ CONFIRMATION_TOKEN_VALID_FOR = 2.days
 
   def full_name
     [ first_name, last_name ].select(&:present?).join(" ")
+  end
+
+  def liked?(listing)
+    favorites.exists?(listing_id: listing.id)
   end
 
   def confirmed?

@@ -1,0 +1,14 @@
+<% content_for :title, "My Likes" %>
+
+<div class="space-y-6">
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <h1 class="text-3xl font-bold text-gray-800">My Likes</h1>
+    <%= link_to "Browse listings",
+                listings_path,
+                class: "inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" %>
+  </div>
+
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <%= render partial: "listings/listings", locals: { listings: @listings, query: nil } %>
+  </div>
+</div>

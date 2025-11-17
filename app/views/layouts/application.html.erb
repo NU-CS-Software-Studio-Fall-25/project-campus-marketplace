@@ -40,6 +40,7 @@
             <div class="hidden md:flex items-center space-x-4">
               <% if authenticated? %>
                 <%= link_to 'All Listings', listings_path, class: 'px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700' %>
+                <%= link_to 'My Likes', favorites_path, class: 'px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700' %>
                 <%= link_to 'My Listings', mine_listings_path, class: 'px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700' %>
                 <%= link_to 'Profile', profile_path, class: 'px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700' %>
               <% end %>

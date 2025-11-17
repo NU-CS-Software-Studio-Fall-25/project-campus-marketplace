@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       post :generate_description
     end
   end
+  resources :favorites, only: %i[index create destroy], param: :listing_id
   resource :profile, only: %i[show update]
   # Allow full CRUD for users so system tests and app pages can access index/show/edit/update/destroy
   resources :users, only: %i[new create destroy]
