@@ -1,0 +1,57 @@
+<div class="mx-auto max-w-3xl space-y-6 py-8">
+  <div>
+    <h1 class="text-2xl font-semibold text-gray-900">AI Description Playground</h1>
+    <p class="mt-2 text-sm text-gray-600">
+      Use this page to verify that the Gemini integration works before wiring it into other flows.
+    </p>
+  </div>
+
+  <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+    <%= form_with url: "#",
+                  local: true,
+                  data: { controller: "ai-description", "ai-description-url-value": ai_description_listings_path },
+                  class: "space-y-5" do |form| %>
+      <div>
+        <%= form.label :title, "Listing title", class: "block text-sm font-medium text-gray-700" %>
+        <%= form.text_field :title,
+                            value: @title,
+                            class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+                            placeholder: "Ex: Dorm desk with built-in shelves",
+                            data: { "ai-description-target": "title" } %>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between">
+          <%= form.label :notes, "Notes for the AI", class: "text-sm font-medium text-gray-700" %>
+          <label class="text-xs text-gray-500">
+            Tone
+            <%= select_tag :test_tone,
+                           options_for_select([["Friendly", "friendly"], ["Professional", "professional"], ["Playful", "playful"]], @tone),
+                           class: "ml-2 rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500",
+                           data: { "ai-description-target": "tone" } %>
+          </label>
+        </div>
+        <%= form.text_area :notes,
+                           value: @notes,
+                           rows: 4,
+                           class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+                           placeholder: "Add any bullet points or must-have info. The AI will rewrite this into a polished description.",
+                           data: { "ai-description-target": "output" } %>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <button type="button"
+                class="inline-flex items-center rounded-md border border-indigo-600 px-4 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+                data-ai-description-target="button"
+                data-action="click->ai-description#generate">
+          Generate description
+        </button>
+        <span class="text-xs text-gray-500" data-ai-description-target="status"></span>
+      </div>
+
+      <p class="rounded-md bg-gray-50 p-4 text-xs text-gray-500">
+        The textarea above will be overwritten with the most recent response so you can copy/paste it elsewhere.
+      </p>
+    <% end %>
+  </div>
+</div>
