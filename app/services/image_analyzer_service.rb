@@ -1,4 +1,5 @@
 require "base64"
+require "json"
 
 class ImageAnalyzerService
   def initialize(image_blob)
@@ -21,16 +22,16 @@ class ImageAnalyzerService
     end
 
     # Check cache first
-    cached_description = get_cached_description
-    return cached_description if cached_description.present?
+    cached_result = get_cached_result
+    return cached_result if cached_result.present?
 
     # Generate new description
-    description = generate_from_api
+    result = generate_from_api
     
     # Cache the result
-    cache_description(description) if description.present?
+    cache_result(result) if result.present?
     
-    description
+    result
   end
 
   private
@@ -48,13 +49,14 @@ class ImageAnalyzerService
     "ai_description:#{@image_blob.checksum}"
   end
 
-  def get_cached_description
-    Rails.cache.read(cache_key)
+  def get_cached_result
+    cached = Rails.cache.read(cache_key)
+    normalize_cached_result(cached)
   end
 
-  def cache_description(description)
+  def cache_result(result)
     duration = Rails.application.config.ai_description_cache_duration
-    Rails.cache.write(cache_key, description, expires_in: duration)
+    Rails.cache.write(cache_key, result, expires_in: duration)
   end
 
   def generate_from_api
@@ -74,10 +76,7 @@ class ImageAnalyzerService
           {
             role: "user",
             content: [
-              {
-                type: "text",
-                text: "You are helping a college student sell an item on a campus marketplace. Analyze this image and generate a brief, appealing product description (2-3 sentences max, around 50-100 words). Focus on: what the item is, its condition, key features, and any visible details that would interest a buyer. Be concise and use a casual, friendly tone appropriate for college students."
-              },
+              prompt_payload,
               {
                 type: "image_url",
                 image_url: {
@@ -91,9 +90,91 @@ class ImageAnalyzerService
       }
     )
 
-    response.dig("choices", 0, "message", "content")&.strip
+    content = response.dig("choices", 0, "message", "content")
+    parsed = parse_response(content)
+    return nil unless parsed[:description].present?
+
+    parsed
   rescue StandardError => e
     Rails.logger.error "ImageAnalyzerService error: #{e.message}"
+    nil
+  end
+
+  def prompt_payload
+    categories = Listing.categories.keys
+    {
+      type: "text",
+      text: <<~PROMPT.squish
+        You are helping a college student sell an item on a campus marketplace. Analyze this image and respond ONLY with JSON using this schema:
+        {"description":"50-100 word friendly description, 2-3 sentences","category":"one of #{categories.join(', ')}"}.
+        Focus on what the item is, its condition, key features, and any visible details that would interest a buyer. Choose the category that best matches the item based solely on the image.
+      PROMPT
+    }
+  end
+
+  def parse_response(raw_content)
+    return { description: nil, category: nil } if raw_content.blank?
+
+    cleaned = extract_json_payload(raw_content)
+    data = JSON.parse(cleaned)
+    description = data["description"].to_s.strip
+    category = normalize_category(data["category"])
+    { description: description, category: category }
+  rescue JSON::ParserError
+    Rails.logger.warn "ImageAnalyzerService received unparseable response: #{raw_content}"
+    fallback_description = extract_description_from_text(raw_content) || raw_content.to_s.strip.presence
+    fallback_category = extract_category_from_text(raw_content)
+    {
+      description: fallback_description,
+      category: fallback_category
+    }
+  end
+
+  def normalize_cached_result(value)
+    case value
+    when Hash
+      {
+        description: value[:description] || value["description"],
+        category: normalize_category(value[:category] || value["category"])
+      }
+    when String
+      { description: value, category: nil }
+    else
+      nil
+    end
+  end
+
+  def normalize_category(value)
+    allowed = Listing.categories.keys
+    normalized = value.to_s.downcase
+    return nil if normalized.blank?
+    allowed.include?(normalized) ? normalized : "other"
+  end
+
+  def extract_json_payload(content)
+    stripped = content.to_s.strip
+    return stripped if stripped.start_with?("{") && stripped.end_with?("}")
+
+    start_index = stripped.index("{")
+    end_index = stripped.rindex("}")
+    if start_index && end_index && end_index >= start_index
+      stripped[start_index..end_index]
+    else
+      stripped
+    end
+  end
+
+  def extract_category_from_text(content)
+    match = content.to_s.match(/"category"\s*:\s*"([^"]+)"/i)
+    return normalize_category(match[1]) if match
+
+    nil
+  end
+
+  def extract_description_from_text(content)
+    match = content.to_s.match(/"description"\s*:\s*"([^"]+)"/im)
+    return match[1].strip if match
+
     nil
   end
 
