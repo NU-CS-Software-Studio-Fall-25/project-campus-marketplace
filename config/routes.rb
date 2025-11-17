@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resources :passwords, param: :token, only: %i[new create edit update]
   resource :confirmation, only: :create, controller: "confirmations"
   get "confirmations/:token", to: "confirmations#show", as: :confirmation_token
+  match "/auth/:provider/callback", to: "sessions#google", via: %i[get post]
+  get "/auth/failure", to: "sessions#failure"
   resources :listings do
     collection do
       get :mine

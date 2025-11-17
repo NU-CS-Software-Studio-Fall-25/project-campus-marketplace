@@ -6,6 +6,25 @@
     <p class="mt-2 text-sm text-gray-500">Sign in with your Northwestern email to continue.</p>
   </div>
 
+  <div class="space-y-4">
+    <%= button_to "/auth/google_oauth2",
+                  method: :post,
+                  data: { turbo: false },
+                  class: "flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" do %>
+      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 533.5 544.3" aria-hidden="true">
+        <path d="M533.5 278.4c0-18.5-1.5-37-4.6-54.8H272v103.8h146.9c-6.3 34.4-25.6 63.4-54.5 82.8v68h88.2c51.6-47.5 80.9-117.8 80.9-199.8z" fill="#4285f4"/>
+        <path d="M272 544.3c73.6 0 135.4-24.2 180.5-65.9l-88.2-68c-24.5 16.5-56 26-92.3 26-70.9 0-131-47.9-152.4-112.2h-91v70.7c44.8 88.7 137 149.4 243.4 149.4z" fill="#34a853"/>
+        <path d="M119.6 324.1c-10.2-30-10.2-62.4 0-92.4v-70.7h-91c-38.1 75.6-38.1 157.9 0 233.5l91-70.4z" fill="#fbbc04"/>
+        <path d="M272 107.7c38.9-.6 76.3 14.8 104.7 42.7l78-78C407.1 24 344.2-2.1 272 0 165.6 0 73.4 60.7 28.6 149.4l91 70.7C141 155.8 201.1 107.7 272 107.7z" fill="#ea4335"/>
+      </svg>
+      <span>Continue with Google</span>
+    <% end %>
+    <div class="relative py-2 text-center">
+      <span class="absolute inset-x-0 top-1/2 -translate-y-1/2 border-t border-gray-200"></span>
+      <span class="relative bg-white px-3 text-xs uppercase tracking-wider text-gray-500">or</span>
+    </div>
+  </div>
+
   <%= form_with url: session_path, local: true, class: "space-y-5" do |form| %>
     <div>
       <%= form.label :email_address, "Email address", class: "block text-sm font-medium text-gray-700" %>
