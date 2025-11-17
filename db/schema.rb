@@ -45,6 +45,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_004023) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "favorites", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "listing_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["listing_id"], name: "index_favorites_on_listing_id"
+    t.index ["user_id", "listing_id"], name: "index_favorites_on_user_id_and_listing_id", unique: true
+    t.index ["user_id"], name: "index_favorites_on_user_id"
+  end
+
   create_table "listings", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -53,6 +63,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_004023) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "category", default: "other", null: false
+    t.integer "favorites_count", default: 0, null: false
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -91,5 +102,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_004023) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "favorites", "listings"
+  add_foreign_key "favorites", "users"
   add_foreign_key "sessions", "users"
 end
