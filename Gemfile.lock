@@ -368,7 +368,7 @@ GEM
       rubocop (>= 1.72)
       rubocop-performance (>= 1.24)
       rubocop-rails (>= 2.30)
-    ruby-openai (7.4.0)
+    ruby-openai (8.3.0)
       event_stream_parser (>= 0.3.0, < 2.0.0)
       faraday (>= 1)
       faraday-multipart (>= 1)
@@ -422,7 +422,7 @@ GEM
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.1.0)
-    uri (1.0.4)
+    uri (1.1.1)
     useragent (0.16.11)
     version_gem (1.1.9)
     web-console (4.2.1)
@@ -467,7 +467,7 @@ DEPENDENCIES
   rails (~> 8.0.3)
   rspec-expectations
   rubocop-rails-omakase
-  ruby-openai (~> 7.0)
+  ruby-openai (~> 8.3)
   selenium-webdriver
   sprockets-rails
   stimulus-rails

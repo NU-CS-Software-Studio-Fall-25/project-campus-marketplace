@@ -46,7 +46,7 @@ gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"
 
 # OpenAI for AI-powered image analysis and description generation
-gem "ruby-openai", "~> 7.0"
+gem "ruby-openai", "~> 8.3"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
