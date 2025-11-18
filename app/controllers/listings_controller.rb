@@ -123,6 +123,11 @@ class ListingsController < ApplicationController
 
   # GET /listings/1 or /listings/1.json
   def show
+    @bid = Bid.new
+    if current_user
+      @existing_bid = @listing.bids.find_by(buyer: current_user)
+      @incoming_bids = @listing.bids.includes(:buyer).recent_first if current_user == @listing.user
+    end
   end
 
   # GET /listings/new

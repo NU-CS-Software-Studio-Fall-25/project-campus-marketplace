@@ -1,0 +1,27 @@
+<p>Hi <%= @bid.buyer.first_name %>,</p>
+
+<p>
+  <strong><%= @seller.full_name %></strong> has updated your offer for
+  "<%= @listing.title %>".
+</p>
+
+<% if @bid.accepted? %>
+  <p>Your offer of <strong><%= number_to_currency(@bid.amount) %></strong> was <strong>accepted</strong>.</p>
+<% elsif @bid.rejected? %>
+  <p>Your offer was <strong>declined</strong>.</p>
+<% elsif @bid.countered? %>
+  <p>
+    The seller countered at <strong><%= number_to_currency(@bid.response_amount) %></strong>.
+  </p>
+<% end %>
+
+<% if @bid.response_message.present? %>
+  <p><em>"<%= @bid.response_message %>"</em></p>
+<% end %>
+
+<p>
+  View the listing to follow up or respond:
+  <%= link_to listing_url(@listing), listing_url(@listing) %>
+</p>
+
+<p>Thanks for using NU Campus Marketplace.</p>
