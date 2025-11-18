@@ -1,4 +1,5 @@
 class BidMailer < ApplicationMailer
+  include ActionView::Helpers::NumberHelper
   helper ActionView::Helpers::NumberHelper
 
   def new_bid_notification
