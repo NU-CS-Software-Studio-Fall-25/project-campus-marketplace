@@ -8,6 +8,11 @@ export default class extends Controller {
   }
 
   connect() {
+    // Ensure the description field is editable by default
+    if (this.hasDescriptionFieldTarget) {
+      this.descriptionFieldTarget.disabled = false
+    }
+
     if (this.hasImageInputTarget) {
       this.imageInputTarget.addEventListener("change", (event) => {
         if (event.target.files.length > 0) {
