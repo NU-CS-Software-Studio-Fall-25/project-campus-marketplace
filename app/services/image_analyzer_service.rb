@@ -8,13 +8,13 @@ class ImageAnalyzerService
 
   def generate_description
     return nil unless @image_blob.present?
-    
+
     # Check if feature is enabled
     unless feature_enabled?
       Rails.logger.info "AI description generation is disabled"
       return nil
     end
-    
+
     # Check rate limit
     unless check_rate_limit
       Rails.logger.warn "AI description rate limit exceeded"
@@ -27,10 +27,10 @@ class ImageAnalyzerService
 
     # Generate new description
     result = generate_from_api
-    
+
     # Cache the result
     cache_result(result) if result.present?
-    
+
     result
   end
 

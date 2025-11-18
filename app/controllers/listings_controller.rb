@@ -14,14 +14,14 @@ class ListingsController < ApplicationController
   # POST /listings/generate_description
   def generate_description
     signed_id = params[:signed_id]
-    
+
     if signed_id.blank?
       return render json: { error: "No image provided" }, status: :unprocessable_entity
     end
 
     # Check if feature is enabled
     unless Rails.application.config.ai_description_enabled
-      return render json: { 
+      return render json: {
         error: "AI description generation is currently unavailable. Please enter a description manually.",
         disabled: true
       }, status: :service_unavailable
@@ -30,9 +30,9 @@ class ListingsController < ApplicationController
     # Check rate limit before processing
     limit = Rails.application.config.ai_description_rate_limit
     remaining = RateLimiter.remaining("ai_description", limit, 3600)
-    
+
     if remaining <= 0
-      return render json: { 
+      return render json: {
         error: "AI description limit reached. Please try again later or enter a description manually.",
         rate_limited: true
       }, status: :too_many_requests
