@@ -37,13 +37,13 @@ class ListingsTest < ApplicationSystemTestCase
 
   test "should update Listing" do
     sign_in_as(@user)
-  visit mine_listings_url
-  click_on "Edit", match: :first
+    visit mine_listings_url
+    click_on "Edit", match: :first
 
-  # Wait for the edit page to load to avoid filling fields on the index page
-  assert_selector "h1", text: "Editing Listing"
+    # Wait for the edit page to load to avoid filling fields on the index page
+    assert_selector "h1", text: "Editing Listing"
 
-  fill_in "Description", with: "Updated description"
+    fill_in "Description", with: "Updated description"
     fill_in "Price", with: @listing.price
     fill_in "Title", with: @listing.title
     select "Furniture", from: "Category"
