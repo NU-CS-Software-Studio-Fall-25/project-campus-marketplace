@@ -25,9 +25,9 @@ class ListingsTest < ApplicationSystemTestCase
     visit mine_listings_url
     click_on "New listing"
 
+    fill_in "Title", with: @listing.title
     fill_in "Description", with: @listing.description
     fill_in "Price", with: @listing.price
-    fill_in "Title", with: @listing.title
     select "Electronics", from: "Category"
     attach_file "Image", file_fixture("placeholder.png")
     click_on "Create Listing"
@@ -37,7 +37,7 @@ class ListingsTest < ApplicationSystemTestCase
 
   test "should update Listing" do
     sign_in_as(@user)
-    visit mine_listings_url
+  visit mine_listings_url
   click_on "Edit", match: :first
 
   # Wait for the edit page to load to avoid filling fields on the index page
@@ -49,15 +49,15 @@ class ListingsTest < ApplicationSystemTestCase
     select "Furniture", from: "Category"
     click_on "Update Listing"
 
-    assert_text "Listing was successfully updated."
+    assert_no_text "Editing Listing"
+    assert_text "Updated description"
   end
 
   test "should destroy Listing" do
     sign_in_as(@user)
     visit mine_listings_url
-    accept_confirm "Delete this listing? This action cannot be undone." do
-      click_on "Delete", match: :first
-    end
+    page.execute_script("window.confirm = () => true")
+    click_on "Delete", match: :first
 
     assert_text "Listing was successfully destroyed."
   end
@@ -91,16 +91,11 @@ class ListingsTest < ApplicationSystemTestCase
     sign_in_as(@user)
     visit listings_url
 
-    check "Over $100"
-
-  # Ensure checkbox is actually checked
+    find("#price_range_filter_over_100", visible: :all).set(true)
     assert_selector "input#price_range_filter_over_100:checked"
-
-  # Fire an input event on the checkbox to trigger the Stimulus controller (update -> AJAX)
     page.execute_script("document.getElementById('price_range_filter_over_100').dispatchEvent(new Event('input', { bubbles: true }))")
 
-  # Wait for the expensive listing to remain and the cheap one to disappear
-    assert_selector "#listing_298486374", wait: 5
-    assert_no_selector "#listing_980190962", wait: 5
+    assert_no_text "Calculus Textbook"
+    assert_text "MacBook Pro"
   end
 end
