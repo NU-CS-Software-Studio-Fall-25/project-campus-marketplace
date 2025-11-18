@@ -59,8 +59,12 @@ module TestDataHelpers
 
     listing = user.listings.build(attrs)
     attach_listing_image(listing)
-    listing.save!
-    listing
+      listing.save!
+      listing
+    end
+
+  def create_untracked_user(overrides = {})
+    User.create!(build_user_attributes(overrides))
   end
 
   def remember_config(key)

@@ -18,3 +18,9 @@ Around("@stub_ai_description") do |scenario, block|
 ensure
   ImageAnalyzerService.define_method(:generate_description, original_method)
 end
+
+Before do
+  ActiveJob::Base.queue_adapter = :test
+  ActiveJob::Base.queue_adapter.enqueued_jobs.clear
+  ActionMailer::Base.deliveries.clear
+end

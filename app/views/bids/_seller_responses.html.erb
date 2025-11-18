@@ -28,7 +28,7 @@
 
           <% if bid.pending? %>
             <div class="mt-3 flex flex-wrap gap-3 text-sm">
-              <%= form_with url: accept_bid_path(bid), method: :patch, local: true, class: "flex-1 min-w-[160px]" do |form| %>
+              <%= form_with scope: :bid, url: accept_bid_path(bid), method: :patch, local: true, class: "flex-1 min-w-[160px]" do |form| %>
                 <div class="flex items-center gap-2">
                   <%= form.text_field :response_message,
                                       placeholder: "Optional note",
@@ -38,7 +38,7 @@
                 </div>
               <% end %>
 
-              <%= form_with url: reject_bid_path(bid), method: :patch, local: true, class: "flex-1 min-w-[160px]" do |form| %>
+              <%= form_with scope: :bid, url: reject_bid_path(bid), method: :patch, local: true, class: "flex-1 min-w-[160px]" do |form| %>
                 <div class="flex items-center gap-2">
                   <%= form.text_field :response_message,
                                       placeholder: "Optional note",
@@ -48,7 +48,7 @@
                 </div>
               <% end %>
 
-              <%= form_with url: counter_bid_path(bid), method: :patch, local: true, class: "flex-1 min-w-[220px]" do |form| %>
+              <%= form_with scope: :bid, url: counter_bid_path(bid), method: :patch, local: true, class: "flex-1 min-w-[220px]" do |form| %>
                 <div class="grid grid-cols-[auto,1fr,auto] items-center gap-2">
                   <%= form.number_field :response_amount,
                                         step: 0.01,
