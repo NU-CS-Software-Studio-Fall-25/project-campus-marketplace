@@ -11,7 +11,11 @@ end
 
 When("I request an AI description") do
   signed_id = @ai_blob&.signed_id
-  page.driver.post(generate_description_listings_path, params: { signed_id: signed_id })
+  page.driver.post(
+    generate_description_listings_path,
+    { signed_id: signed_id }.to_json,
+    { 'CONTENT_TYPE' => 'application/json' }
+  )
   @ai_response = JSON.parse(page.body)
   @ai_status = page.status_code
 end
