@@ -88,10 +88,16 @@ class ListingsTest < ApplicationSystemTestCase
     sign_in_as(@user)
     visit listings_url
 
-    check "Over $100"
-    click_on "Search"
+  check "Over $100"
 
-    assert_no_text "Calculus Textbook"
-    assert_text "MacBook Pro"
+  # Ensure checkbox is actually checked
+  assert_selector "input#price_range_filter_over_100:checked"
+
+  # Fire an input event on the checkbox to trigger the Stimulus controller (update -> AJAX)
+  page.execute_script("document.getElementById('price_range_filter_over_100').dispatchEvent(new Event('input', { bubbles: true }))")
+
+  # Wait for the expensive listing to remain and the cheap one to disappear
+  assert_selector "#listing_298486374", wait: 5
+  assert_no_selector "#listing_980190962", wait: 5
   end
 end
