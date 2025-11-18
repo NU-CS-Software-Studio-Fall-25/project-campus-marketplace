@@ -83,7 +83,7 @@
         </div>
 
         <div>
-          <div class="<%= ["mb-2", @pagy.count.positive? ? nil : "hidden"].compact.join(" ") %>"
+          <div class="<%= [ "mb-2", @pagy.count.positive? ? nil : "hidden" ].compact.join(" ") %>"
                data-listings-search-target="summary">
             <%= render partial: "listings/summary", locals: { pagy: @pagy } %>
           </div>
@@ -94,7 +94,7 @@
             <%= render partial: "listings/listings", locals: { listings: @listings, query: @query } %>
           </div>
 
-          <div class="<%= ["mt-6 flex justify-center", @pagy.pages > 1 ? nil : "hidden"].compact.join(" ") %>"
+          <div class="<%= [ "mt-6 flex justify-center", @pagy.pages > 1 ? nil : "hidden" ].compact.join(" ") %>"
                data-listings-search-target="pagination">
             <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
           </div>

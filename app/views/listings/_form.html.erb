@@ -67,7 +67,7 @@
     <div class="space-y-2">
       <%= form.label :category, class: "block text-base font-semibold text-gray-800" %>
       <%= form.select :category,
-                      Listing.categories.keys.map { |category| [category.titleize, category] },
+                      Listing.categories.keys.map { |category| [ category.titleize, category ] },
                       {},
                       class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base",
                       required: true,

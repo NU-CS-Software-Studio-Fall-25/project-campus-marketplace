@@ -106,7 +106,7 @@ class ImageAnalyzerService
       type: "text",
       text: <<~PROMPT.squish
         You are helping a college student sell an item on a campus marketplace. Analyze this image and respond ONLY with JSON using this schema:
-        {"description":"50-100 word friendly description, 2-3 sentences","category":"one of #{categories.join(', ')}"}.
+        {"description":"50-100 word friendly description, 2-3 sentences","category":"one of #{categories.join(", ")}"}.
         Focus on what the item is, its condition, key features, and any visible details that would interest a buyer. Choose the category that best matches the item based solely on the image.
       PROMPT
     }

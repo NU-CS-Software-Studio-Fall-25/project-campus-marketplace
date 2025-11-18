@@ -39,7 +39,7 @@ class SessionsController < ApplicationController
 
     unless allowed_domains.any? { |domain| email.end_with?("@#{domain}") }
       Rails.logger.warn("[sessions#google] Attempted Google login with unauthorized domain: #{email}")
-      redirect_to new_session_path, alert: "Please sign in with your Northwestern email (#{allowed_domains.join(', ')})."
+      redirect_to new_session_path, alert: "Please sign in with your Northwestern email (#{allowed_domains.join(", ")})."
       return
     end
 

@@ -179,7 +179,7 @@ PASSWORD_REQUIREMENT_CHECKS = {
   def self.generate_unique_username(base)
     slug = base.to_s.downcase.gsub(/[^a-z0-9]/, "")
     slug = "student" if slug.blank?
-    slug = slug[0, 20]
+    slug = slug[ 0, 20 ]
     candidate = slug
     suffix = 1
 

@@ -26,7 +26,7 @@
           <label class="text-xs text-gray-500">
             Tone
             <%= select_tag :test_tone,
-                           options_for_select([["Friendly", "friendly"], ["Professional", "professional"], ["Playful", "playful"]], @tone),
+                           options_for_select([ [ "Friendly", "friendly" ], [ "Professional", "professional" ], [ "Playful", "playful" ] ], @tone),
                            class: "ml-2 rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500",
                            data: { "ai-description-target": "tone" } %>
           </label>

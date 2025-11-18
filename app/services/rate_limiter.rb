@@ -19,6 +19,6 @@ class RateLimiter
   def self.remaining(key, limit, period_seconds = 3600)
     cache_key = "#{REDIS_KEY_PREFIX}:#{key}"
     current_count = Rails.cache.read(cache_key) || 0
-    [limit - current_count, 0].max
+    [ limit - current_count, 0 ].max
   end
 end
