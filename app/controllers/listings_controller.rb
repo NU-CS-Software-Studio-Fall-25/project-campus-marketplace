@@ -97,10 +97,10 @@ class ListingsController < ApplicationController
     pagy, listings = pagy(listings.order(created_at: :desc), items: 12, params: pagy_params)
 
     pagination_html = pagy.pages > 1 ? view_context.pagy_nav(pagy) : ""
-    summary_html = render_to_string(partial: "listings/summary", locals: { pagy: pagy }, formats: [:html])
+    summary_html = render_to_string(partial: "listings/summary", locals: { pagy: pagy }, formats: [ :html ])
 
     render json: {
-      html: render_to_string(partial: "listings/listings", locals: { listings: listings, query: query }, formats: [:html]),
+      html: render_to_string(partial: "listings/listings", locals: { listings: listings, query: query }, formats: [ :html ]),
       pagination: pagination_html,
       summary: summary_html
     }

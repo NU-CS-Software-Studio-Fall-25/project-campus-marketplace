@@ -7,7 +7,7 @@ class CreateFavorites < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :favorites, [:user_id, :listing_id], unique: true
+  add_index :favorites, [ :user_id, :listing_id ], unique: true
     add_column :listings, :favorites_count, :integer, null: false, default: 0
   end
 end
