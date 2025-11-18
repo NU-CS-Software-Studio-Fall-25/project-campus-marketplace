@@ -40,6 +40,31 @@ class UserTest < ActiveSupport::TestCase
     assert_equal user, @logged_user
   end
 
+  test "rejects passwords that do not meet complexity requirements" do
+    user = User.new(
+      first_name: "New",
+      last_name: "Student",
+      email_address: "new_student@u.northwestern.edu",
+      username: "newstudent",
+      password: "short1",
+      password_confirmation: "short1"
+    )
+
+    assert_not user.valid?
+    error_message = user.errors[:password].first
+
+    assert_includes error_message, "at least 8 characters long"
+    assert_includes error_message, "include an uppercase letter"
+    assert_includes error_message, "include a special character"
+  end
+
+  test "generated compliant password meets requirements" do
+    password = User.generate_compliant_password
+
+    assert User.password_meets_requirements?(password)
+    assert_operator password.length, :>=, 8
+  end
+
   private
     def google_auth_hash(overrides = {})
       default = {

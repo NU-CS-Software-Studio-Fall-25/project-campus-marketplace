@@ -17,6 +17,13 @@ EMAIL_DOMAIN_REGEX = /\A[^@\s]+@(u\.)?northwestern\.edu\z/i
 PHONE_REGEX = /\A\+?\d{10,15}\z/
 PASSWORD_RESET_TOKEN_VALID_FOR = 30.minutes
 CONFIRMATION_TOKEN_VALID_FOR = 2.days
+PASSWORD_REQUIREMENT_CHECKS = {
+  length: ->(password) { password.length >= 8 },
+  lowercase: ->(password) { password.match?(/[a-z]/) },
+  uppercase: ->(password) { password.match?(/[A-Z]/) },
+  number: ->(password) { password.match?(/\d/) },
+  special: ->(password) { password.match?(/[^A-Za-z0-9]/) }
+}.freeze
 
   validates :first_name, presence: true, length: { maximum: 50 }
   validates :last_name, presence: true, length: { maximum: 50 }
@@ -24,6 +31,7 @@ CONFIRMATION_TOKEN_VALID_FOR = 2.days
   validates :username, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: 50 }
   validates :phone_number, allow_blank: true, format: { with: PHONE_REGEX, message: "must be digits with optional leading +" }
   validates :google_uid, uniqueness: true, allow_nil: true
+  validate :password_complexity, if: :validate_password?
 
   def full_name
     [ first_name, last_name ].select(&:present?).join(" ")
@@ -31,6 +39,26 @@ CONFIRMATION_TOKEN_VALID_FOR = 2.days
 
   def liked?(listing)
     favorites.exists?(listing_id: listing.id)
+  end
+
+  def validate_password?
+    password.present?
+  end
+
+  def password_complexity
+    return unless validate_password?
+
+    unmet_requirements = []
+
+    unmet_requirements << "be at least 8 characters long" unless PASSWORD_REQUIREMENT_CHECKS[:length].call(password)
+    unmet_requirements << "include a lowercase letter" unless PASSWORD_REQUIREMENT_CHECKS[:lowercase].call(password)
+    unmet_requirements << "include an uppercase letter" unless PASSWORD_REQUIREMENT_CHECKS[:uppercase].call(password)
+    unmet_requirements << "include a number" unless PASSWORD_REQUIREMENT_CHECKS[:number].call(password)
+    unmet_requirements << "include a special character" unless PASSWORD_REQUIREMENT_CHECKS[:special].call(password)
+
+    return if unmet_requirements.empty?
+
+    errors.add(:password, "must #{unmet_requirements.to_sentence(two_words_connector: " and ", last_word_connector: ", and ")}")
   end
 
   def confirmed?
@@ -134,7 +162,7 @@ CONFIRMATION_TOKEN_VALID_FOR = 2.days
       end
 
       username = generate_unique_username(normalized_email.split("@").first)
-      random_password = SecureRandom.hex(32)
+      random_password = generate_compliant_password
 
       create!(
         email_address: normalized_email,
@@ -161,5 +189,16 @@ CONFIRMATION_TOKEN_VALID_FOR = 2.days
     end
 
     candidate
+  end
+
+  def self.password_meets_requirements?(password)
+    PASSWORD_REQUIREMENT_CHECKS.values.all? { |check| check.call(password.to_s) }
+  end
+
+  def self.generate_compliant_password
+    loop do
+      candidate = SecureRandom.base64(24)
+      return candidate if password_meets_requirements?(candidate)
+    end
   end
 end

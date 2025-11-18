@@ -4,7 +4,7 @@
   <div class="mb-6 text-center space-y-2">
     <h1 class="text-3xl font-semibold text-gray-900">Choose a new password</h1>
     <p class="text-sm text-gray-500">
-      Make sure it’s at least 8 characters long. Once you save it, we’ll sign you in automatically.
+      Make sure it’s at least 8 characters long and includes uppercase and lowercase letters, a number, and a special character. Once you save it, we’ll sign you in automatically.
     </p>
   </div>
 
@@ -29,13 +29,15 @@
                 class: "space-y-5" do |form| %>
     <%= form.hidden_field :email_address, value: @user.email_address %>
 
-    <div>
+    <div data-controller="password-requirements" data-password-requirements-min-length-value="8">
       <%= form.label :password, "New password", class: "block text-sm font-medium text-gray-700" %>
       <%= form.password_field :password,
                               required: true,
                               autocomplete: "new-password",
                               maxlength: 72,
+                              data: { password_requirements_target: "input", action: "input->password-requirements#update" },
                               class: "mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-base text-gray-900 placeholder-gray-400 shadow-sm transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 focus:outline-none" %>
+      <%= render "shared/password_requirements", min_length: 8 %>
     </div>
 
     <div>
