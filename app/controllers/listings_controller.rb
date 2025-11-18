@@ -230,37 +230,33 @@ class ListingsController < ApplicationController
       selected = Array(price_ranges) & PRICE_RANGES.keys
       return scope if selected.empty? || selected.length == PRICE_RANGES.length
 
-      clauses = []
-      values = {}
+      price_column = Listing.arel_table[:price]
 
-      selected.each_with_index do |key, index|
+      predicates = selected.filter_map do |key|
         range = PRICE_RANGES[key]
         next unless range
 
-        clause_parts = []
+        parts = []
 
         if range.key?(:min)
-          comparator = range[:min_comparison] || ">="
-          min_key = :"min_#{index}"
-          clause_parts << "price #{comparator} :#{min_key}"
-          values[min_key] = range[:min]
+          comparator = arel_operator(range[:min_comparison], :gteq)
+          parts << price_column.public_send(comparator, range[:min])
         end
 
         if range.key?(:max)
-          comparator = range[:max_comparison] || "<="
-          max_key = :"max_#{index}"
-          clause_parts << "price #{comparator} :#{max_key}"
-          values[max_key] = range[:max]
+          comparator = arel_operator(range[:max_comparison], :lteq)
+          parts << price_column.public_send(comparator, range[:max])
         end
 
-        next if clause_parts.empty?
+        next if parts.empty?
 
-        clauses << "(#{clause_parts.join(" AND ")})"
+        parts.reduce { |memo, node| memo.and(node) }
       end
 
-      return scope if clauses.empty?
+      return scope if predicates.empty?
 
-      scope.where(clauses.join(" OR "), values)
+      combined = predicates.reduce { |memo, node| memo.or(node) }
+      scope.where(combined)
     end
 
     def extract_categories(raw_categories)
@@ -269,5 +265,20 @@ class ListingsController < ApplicationController
 
     def extract_price_ranges(raw_ranges)
       Array(raw_ranges).map { |range| range.to_s.presence }.compact & PRICE_RANGES.keys
+    end
+
+    def arel_operator(comparison, default)
+      case comparison
+      when ">"
+        :gt
+      when ">="
+        :gteq
+      when "<"
+        :lt
+      when "<="
+        :lteq
+      else
+        default
+      end
     end
 end

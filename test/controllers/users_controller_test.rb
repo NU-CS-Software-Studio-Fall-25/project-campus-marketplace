@@ -15,8 +15,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
           email_address: "newuser@u.northwestern.edu",
           username: "newuser",
           phone_number: "8475550000",
-          password: "password123",
-          password_confirmation: "password123"
+          password: "Password123!",
+          password_confirmation: "Password123!"
         }
       }
     end
