@@ -94,8 +94,8 @@ class ListingsTest < ApplicationSystemTestCase
     sign_in_as(@user)
     visit listings_url
 
-    find("#price_range_filter_over_100", visible: :all).set(true)
-    assert_selector "input#price_range_filter_over_100:checked"
+    find("#price_range_filter_over_100", visible: :all, wait: 5).click
+    assert_checked_field "price_range_filter_over_100", wait: 2
     page.execute_script("document.getElementById('price_range_filter_over_100').dispatchEvent(new Event('input', { bubbles: true }))")
 
     assert_no_text "Calculus Textbook"
