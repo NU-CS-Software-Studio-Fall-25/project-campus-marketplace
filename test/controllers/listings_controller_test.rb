@@ -61,7 +61,7 @@ class ListingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "index filters by category" do
-    get listings_url, params: { categories: ["electronics"] }
+    get listings_url, params: { categories: [ "electronics" ] }
     assert_response :success
     assert_match(/Calculus Textbook/, @response.body)
     assert_no_match(/MacBook Pro/, @response.body)

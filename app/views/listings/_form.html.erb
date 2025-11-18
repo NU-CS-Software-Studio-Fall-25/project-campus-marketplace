@@ -87,7 +87,7 @@
       <p class="text-sm text-gray-500">Upload a JPEG or PNG under 5MB. AI will analyze it and suggest a description.</p>
       <% if listing.image.attached? && listing.image.variable? %>
         <div class="pt-2">
-          <%= image_tag listing.image.variant(resize_to_limit: [150, 150]), class: "h-24 w-24 rounded-md object-cover" %>
+          <%= image_tag listing.image.variant(resize_to_limit: [ 150, 150 ]), class: "h-24 w-24 rounded-md object-cover" %>
         </div>
       <% end %>
     </div>

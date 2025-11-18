@@ -7,7 +7,7 @@
     image_path("pwa/icon-512.png")
   ]
 
-  %w[tailwind.css application.css application.js].each do |asset|
+%w[ tailwind.css application.css application.js ].each do |asset|
     begin
       precache_urls << asset_path(asset)
     rescue StandardError

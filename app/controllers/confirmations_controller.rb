@@ -1,5 +1,5 @@
 class ConfirmationsController < ApplicationController
-  allow_unauthenticated_access only: %i[show create]
+  allow_unauthenticated_access only: %i[ show create ]
 
   def show
     user = User.find_by(email_address: params[:email])

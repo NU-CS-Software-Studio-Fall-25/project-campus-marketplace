@@ -17,7 +17,7 @@
     <article class="flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-100 lg:col-span-2">
       <div class="bg-gray-100">
         <% if defined?(ActiveStorage) && @listing.respond_to?(:image) && @listing.image.respond_to?(:attached?) && @listing.image.attached? %>
-          <%= image_tag @listing.image.variant(resize_to_fill: [900, 700]),
+          <%= image_tag @listing.image.variant(resize_to_fill: [ 900, 700 ]),
                         alt: @listing.title,
                         class: "h-64 w-full object-cover sm:h-80 lg:h-[28rem]" %>
         <% elsif @listing.respond_to?(:image_url) && @listing.image_url.present? %>

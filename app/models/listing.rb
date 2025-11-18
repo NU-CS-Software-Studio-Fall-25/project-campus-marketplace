@@ -25,7 +25,7 @@ class Listing < ApplicationRecord
         return
       end
 
-      unless image.content_type.in?(%w[image/png image/jpeg image/jpg])
+      unless image.content_type.in?(%w[ image/png image/jpeg image/jpg ])
         errors.add(:image, "must be a JPEG or PNG")
       end
 

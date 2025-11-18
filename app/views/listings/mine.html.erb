@@ -13,7 +13,7 @@
       <div class="bg-white rounded-2xl shadow-md ring-1 ring-gray-100 overflow-hidden transition-shadow duration-300 ease-in-out hover:shadow-xl">
         <div class="h-48 overflow-hidden bg-gray-100">
           <% if defined?(ActiveStorage) && listing.respond_to?(:image) && listing.image.respond_to?(:attached?) && listing.image.attached? %>
-            <%= image_tag listing.image.variant(resize_to_fill: [600, 400]),
+            <%= image_tag listing.image.variant(resize_to_fill: [ 600, 400 ]),
                           alt: listing.title,
                           class: "w-full h-full object-cover" %>
           <% elsif listing.respond_to?(:image_url) && listing.image_url.present? %>

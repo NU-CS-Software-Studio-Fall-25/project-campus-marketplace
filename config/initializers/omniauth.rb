@@ -1,6 +1,6 @@
 require "omniauth"
 
-OmniAuth.config.allowed_request_methods = %i[get post]
+OmniAuth.config.allowed_request_methods = %i[ get post ]
 OmniAuth.config.silence_get_warning = true
 
 google_client_id = ENV["GOOGLE_CLIENT_ID"]

@@ -1,5 +1,5 @@
 class FavoritesController < ApplicationController
-  before_action :set_listing, only: %i[create destroy]
+  before_action :set_listing, only: %i[ create destroy ]
 
   def index
     @listings = Current.user.liked_listings.includes(:user).order(created_at: :desc)
