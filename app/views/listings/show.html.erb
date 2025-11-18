@@ -89,7 +89,7 @@
     </article>
 
     <% if seller.present? %>
-      <aside class="h-full rounded-2xl border border-blue-100 bg-blue-50 p-6 shadow-sm lg:col-span-1 lg:self-start">
+      <aside class="h-full space-y-6 rounded-2xl border border-blue-100 bg-blue-50 p-6 shadow-sm lg:col-span-1 lg:self-start">
         <h2 class="text-lg font-semibold text-blue-900">Contact information</h2>
         <dl class="mt-4 space-y-4 text-sm">
           <div class="flex flex-col">
@@ -115,6 +115,14 @@
             </div>
           <% end %>
         </dl>
+
+        <% if current_user.present? %>
+          <% if current_user != @listing.user %>
+            <%= render "bids/new_bid_form", listing: @listing, existing_bid: @existing_bid %>
+          <% elsif current_user == @listing.user %>
+            <%= render "bids/seller_responses", bids: (@incoming_bids || []) %>
+          <% end %>
+        <% end %>
       </aside>
     <% end %>
   </div>

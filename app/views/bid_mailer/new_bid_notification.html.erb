@@ -1,0 +1,18 @@
+<p>Hi <%= @listing.user.first_name %>,</p>
+
+<p>
+  <strong><%= @buyer.full_name %></strong> just offered
+  <strong><%= number_to_currency(@bid.amount) %></strong> for your listing
+  "<%= @listing.title %>".
+</p>
+
+<% if @bid.message.present? %>
+  <p><em>"<%= @bid.message %>"</em></p>
+<% end %>
+
+<p>
+  Review the offer and respond directly from your listing page:
+  <%= link_to listing_url(@listing), listing_url(@listing) %>
+</p>
+
+<p>Thanks for helping keep NU Campus Marketplace active!</p>

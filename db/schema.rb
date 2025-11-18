@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_17_004023) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_17_120000) do
   create_schema "_heroku"
 
   # These are extensions that must be enabled in order to support this database
@@ -43,6 +43,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_004023) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "bids", force: :cascade do |t|
+    t.bigint "listing_id", null: false
+    t.bigint "buyer_id", null: false
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.integer "status", default: 0, null: false
+    t.decimal "response_amount", precision: 10, scale: 2
+    t.text "message"
+    t.text "response_message"
+    t.datetime "responded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["buyer_id"], name: "index_bids_on_buyer_id"
+    t.index ["listing_id", "buyer_id"], name: "index_bids_on_listing_id_and_buyer_id"
+    t.index ["listing_id"], name: "index_bids_on_listing_id"
   end
 
   create_table "favorites", force: :cascade do |t|
@@ -102,6 +118,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_004023) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "bids", "listings"
+  add_foreign_key "bids", "users", column: "buyer_id"
   add_foreign_key "favorites", "listings"
   add_foreign_key "favorites", "users"
   add_foreign_key "sessions", "users"

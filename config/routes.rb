@@ -12,6 +12,14 @@ Rails.application.routes.draw do
       get :suggestions
       post :generate_description
     end
+    resources :bids, only: :create
+  end
+  resources :bids, only: [] do
+    member do
+      patch :accept
+      patch :reject
+      patch :counter
+    end
   end
   resources :favorites, only: %i[ index create destroy ], param: :listing_id
   resource :profile, only: %i[ show update ]
