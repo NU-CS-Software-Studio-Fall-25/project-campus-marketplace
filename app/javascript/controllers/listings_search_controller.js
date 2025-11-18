@@ -21,9 +21,9 @@ export default class extends Controller {
     this.debouncedFetch()
   }
 
-  submit(event) {
-    event.preventDefault()
+  submit() {
     this.fetchUpdates()
+    // Allow the normal form submission to proceed as a graceful fallback
   }
 
   fetchUpdates() {

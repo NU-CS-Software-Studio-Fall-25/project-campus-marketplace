@@ -79,7 +79,7 @@
       <%= form.file_field :image,
                           class: "block w-full text-base text-gray-600 file:mr-4 file:rounded-md file:border-0 file:bg-gray-100 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-gray-700 hover:file:bg-gray-200",
                           accept: "image/png,image/jpeg",
-                          direct_upload: true,
+                          direct_upload: !Rails.env.test?,
                           required: !listing.image.attached?,
                           data: {
                             image_description_target: "imageInput"

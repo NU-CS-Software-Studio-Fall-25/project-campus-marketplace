@@ -9,13 +9,12 @@ class UsersTest < ApplicationSystemTestCase
     fill_in "Northwestern email", with: "signup_tester@u.northwestern.edu"
     fill_in "Username", with: "signup_tester"
     fill_in "Phone number (optional)", with: "8475550202"
-    fill_in "Password", with: "password123"
-    fill_in "Password confirmation", with: "password123"
+    fill_in "Password", with: "Password123!"
+    fill_in "Password confirmation", with: "Password123!"
     click_button "Create Account"
 
-    assert_text "Welcome to the marketplace!"
-    assert_text "Profile"
-    assert_text "signup_tester@u.northwestern.edu"
+    assert_text "Check your email to confirm your account before signing in."
+    assert_text "Sign in"
   end
 
   test "user sees validation error for non-Northwestern email" do
@@ -25,10 +24,10 @@ class UsersTest < ApplicationSystemTestCase
     fill_in "Last name", with: "User"
     fill_in "Northwestern email", with: "bad@example.com"
     fill_in "Username", with: "baduser"
-    fill_in "Password", with: "password123"
-    fill_in "Password confirmation", with: "password123"
+    fill_in "Password", with: "Password123!"
+    fill_in "Password confirmation", with: "Password123!"
     click_button "Create Account"
 
-    assert_text "must end with u.northwestern.edu"
+    assert_text "must end with northwestern.edu or u.northwestern.edu"
   end
 end

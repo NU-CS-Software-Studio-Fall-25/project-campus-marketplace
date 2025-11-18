@@ -4,6 +4,14 @@ class ListingsTest < ApplicationSystemTestCase
   setup do
     @listing = listings(:one)
     @user = users(:one)
+
+    unless @listing.image.attached?
+      @listing.image.attach(
+        io: file_fixture("placeholder.png").open,
+        filename: "placeholder.png",
+        content_type: "image/png"
+      )
+    end
   end
 
   test "visiting the index" do
@@ -21,6 +29,7 @@ class ListingsTest < ApplicationSystemTestCase
     fill_in "Price", with: @listing.price
     fill_in "Title", with: @listing.title
     select "Electronics", from: "Category"
+    attach_file "Image", file_fixture("placeholder.png")
     click_on "Create Listing"
 
     assert_text "Listing was successfully created."
@@ -28,7 +37,7 @@ class ListingsTest < ApplicationSystemTestCase
 
   test "should update Listing" do
     sign_in_as(@user)
-    visit listing_url(@listing)
+    visit mine_listings_url
     click_on "Edit", match: :first
 
     fill_in "Description", with: "Updated description"
@@ -42,8 +51,8 @@ class ListingsTest < ApplicationSystemTestCase
 
   test "should destroy Listing" do
     sign_in_as(@user)
-    visit listing_url(@listing)
-    accept_confirm do
+    visit mine_listings_url
+    accept_confirm "Delete this listing? This action cannot be undone." do
       click_on "Delete", match: :first
     end
 
@@ -65,7 +74,6 @@ class ListingsTest < ApplicationSystemTestCase
     sign_in_as(@user)
     visit listings_url
 
-    click_on "Filters"
     check "Furniture"
     click_on "Search"
 
@@ -77,7 +85,6 @@ class ListingsTest < ApplicationSystemTestCase
     sign_in_as(@user)
     visit listings_url
 
-    click_on "Filters"
     check "Over $100"
     click_on "Search"
 
