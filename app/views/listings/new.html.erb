@@ -1,11 +1,12 @@
 <% content_for :title, "New listing" %>
 
-<div class="card">
-  <div class="card-body">
-    <h1 class="card-title">New listing</h1>
+<div class="max-w-4xl mx-auto space-y-5">
+  <div class="space-y-1">
+    <p class="text-sm font-semibold uppercase tracking-wide text-indigo-600">Create listing</p>
+    <h1 class="text-3xl font-bold text-gray-900">Add a new item</h1>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
     <%= render "form", listing: @listing %>
-    <div class="mt-3">
-      <%= link_to 'Back to listings', listings_path, class: 'btn btn-link' %>
-    </div>
   </div>
 </div>

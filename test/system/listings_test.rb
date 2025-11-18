@@ -69,8 +69,11 @@ class ListingsTest < ApplicationSystemTestCase
     fill_in "Search listings", with: "Calculus"
     click_on "Search"
 
-    assert_text "Calculus Textbook"
-    assert_no_text "MacBook Pro"
+    # Wait for the results area to update to avoid timing races in CI/headless
+    within "#listings" do
+      assert_selector "div", text: "Calculus Textbook"
+      assert_no_selector "div", text: "MacBook Pro"
+    end
   end
 
   test "category filter limits listings" do
