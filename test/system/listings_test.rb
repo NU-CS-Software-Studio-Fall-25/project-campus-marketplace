@@ -78,6 +78,9 @@ class ListingsTest < ApplicationSystemTestCase
     visit listings_url
 
     check "Furniture"
+    assert_selector "input#category_filter_furniture:checked"
+    page.execute_script("document.getElementById('category_filter_furniture').dispatchEvent(new Event('input', { bubbles: true }))")
+
     click_on "Search"
 
     assert_no_text "Calculus Textbook"
