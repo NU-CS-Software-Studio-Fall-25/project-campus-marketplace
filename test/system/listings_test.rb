@@ -55,10 +55,11 @@ class ListingsTest < ApplicationSystemTestCase
   test "should destroy Listing" do
     sign_in_as(@user)
     visit mine_listings_url
-    page.execute_script("window.confirm = () => true")
-    click_on "Delete", match: :first
+    accept_confirm do
+      click_on "Delete", match: :first
+    end
 
-    assert_text "Listing was successfully destroyed."
+    assert_no_text @listing.title
   end
 
   test "search filters listings" do
