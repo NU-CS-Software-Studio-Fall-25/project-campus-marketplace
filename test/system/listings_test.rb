@@ -25,11 +25,14 @@ class ListingsTest < ApplicationSystemTestCase
     visit mine_listings_url
     click_on "New listing"
 
-    fill_in "Title", with: @listing.title
-    fill_in "Description", with: @listing.description
-    fill_in "Price", with: @listing.price
-    select "Electronics", from: "Category"
-    attach_file "Image", file_fixture("placeholder.png")
+    within("form") do
+      fill_in "Title", with: "New Listing Title"
+      fill_in "Description", with: "New listing description"
+      fill_in "Price", with: "25.00"
+      select "Electronics", from: "Category"
+      attach_file "Image", file_fixture("placeholder.png")
+    end
+
     click_on "Create Listing"
 
     assert_text "Listing was successfully created."
