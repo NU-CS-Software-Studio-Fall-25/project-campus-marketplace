@@ -37,8 +37,7 @@ class ListingsTest < ApplicationSystemTestCase
 
   test "should update Listing" do
     sign_in_as(@user)
-    visit mine_listings_url
-    click_on "Edit", match: :first
+    visit edit_listing_url(@listing)
 
     # Wait for the edit page to load to avoid filling fields on the index page
     assert_selector "h1", text: "Editing Listing"

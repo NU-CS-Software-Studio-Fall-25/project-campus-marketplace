@@ -6,9 +6,22 @@
   </div>
 
   <% if existing_bid %>
-    <div class="mt-4 rounded-lg border border-gray-100 bg-gray-50 p-3 text-sm text-gray-700">
-      <p class="font-semibold text-gray-800">Your latest offer:</p>
-      <p class="text-gray-600"><%= number_to_currency(existing_bid.amount) %> — <%= existing_bid.status.humanize %></p>
+    <% border_class, badge_class = case existing_bid.status.to_sym
+       when :accepted
+         [ "border-green-100", "bg-green-100 text-green-800" ]
+       when :rejected
+         [ "border-red-100", "bg-red-100 text-red-800" ]
+       when :countered
+         [ "border-blue-100", "bg-blue-100 text-blue-800" ]
+       else
+         [ "border-yellow-100", "bg-yellow-100 text-yellow-800" ]
+       end %>
+    <div class="mt-4 rounded-lg border <%= border_class %> bg-gray-50 p-3 text-sm text-gray-700">
+      <div class="flex items-center justify-between">
+        <p class="font-semibold text-gray-800">Your latest offer</p>
+        <span class="rounded-full px-2 py-1 text-xs font-semibold <%= badge_class %>"><%= existing_bid.status.humanize %></span>
+      </div>
+      <p class="mt-1 text-gray-600"><%= number_to_currency(existing_bid.amount) %></p>
       <% if existing_bid.countered? && existing_bid.response_amount.present? %>
         <p>Seller countered at <%= number_to_currency(existing_bid.response_amount) %>.</p>
       <% end %>
