@@ -93,9 +93,10 @@ class ListingsTest < ApplicationSystemTestCase
     sign_in_as(@user)
     visit listings_url
 
-    find("#price_range_filter_over_100", visible: :all, wait: 5).click
-    assert_checked_field "price_range_filter_over_100", wait: 2
-    page.execute_script("document.getElementById('price_range_filter_over_100').dispatchEvent(new Event('input', { bubbles: true }))")
+    checkbox = find("label", text: "Over $100").find("input", visible: :all)
+    checkbox.check
+
+    click_on "Search"
 
     assert_no_text "Calculus Textbook"
     assert_text "MacBook Pro"
