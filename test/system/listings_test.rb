@@ -25,7 +25,7 @@ class ListingsTest < ApplicationSystemTestCase
     visit mine_listings_url
     click_on "New listing"
 
-    within("form") do
+    within("form[action='#{listings_path}']") do
       fill_in "Title", with: "New Listing Title"
       fill_in "Description", with: "New listing description"
       fill_in "Price", with: "25.00"
@@ -97,12 +97,12 @@ class ListingsTest < ApplicationSystemTestCase
     sign_in_as(@user)
     visit listings_url
 
-    checkbox = find("label", text: "Over $100").find("input", visible: :all)
-    checkbox.check
-
+    find("label", text: "Over $100").click
     click_on "Search"
 
-    assert_no_text "Calculus Textbook"
-    assert_text "MacBook Pro"
+    within "#listings" do
+      assert_text "MacBook Pro"
+      assert_no_text "Calculus Textbook"
+    end
   end
 end
