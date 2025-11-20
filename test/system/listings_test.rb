@@ -46,20 +46,22 @@ class ListingsTest < ApplicationSystemTestCase
     # Wait for the edit page to load to avoid filling fields on the index page
     assert_selector "h1", text: "Editing Listing"
 
+    fill_in "Title", with: @listing.title
     fill_in "Description", with: "Updated description"
     fill_in "Price", with: @listing.price
-    fill_in "Title", with: @listing.title
     select "Furniture", from: "Category"
+
     click_on "Update Listing"
 
-    assert_text "Listing was successfully updated."
+    # Wait for redirect to show page
+    assert_text "Listing was successfully updated.", wait: 5
     assert_text "Updated description"
   end
 
   test "should destroy Listing" do
     sign_in_as(@user)
     visit mine_listings_url
-    
+
     accept_confirm "Delete this listing? This action cannot be undone." do
       click_on "Delete", match: :first
     end
