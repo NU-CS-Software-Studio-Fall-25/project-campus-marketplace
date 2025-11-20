@@ -63,7 +63,7 @@ class ListingsTest < ApplicationSystemTestCase
     sign_in_as(@user)
     visit mine_listings_url
 
-    accept_confirm "Delete this listing? This action cannot be undone." do
+    page.accept_confirm do
       click_on "Delete", match: :first
     end
 
@@ -109,12 +109,12 @@ class ListingsTest < ApplicationSystemTestCase
 
     # Wait for filters to load
     assert_selector "label", text: "Over $100"
-    
+
     find("label", text: "Over $100").click
-    
+
     # Give JavaScript time to update checkbox state
     sleep 0.1
-    
+
     click_on "Search"
 
     # Wait for filtered results
