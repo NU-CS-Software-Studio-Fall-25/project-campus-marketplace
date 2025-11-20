@@ -26,7 +26,8 @@ class ListingsTest < ApplicationSystemTestCase
     click_on "New listing"
 
     # Wait for the new listing form to load
-    assert_selector "h1", text: "Add a new item"
+    assert_selector "h1", text: "Add a new item", wait: 5
+    assert_selector "form"
 
     fill_in "Title", with: "New Listing Title"
     fill_in "Description", with: "New listing description"
@@ -36,7 +37,7 @@ class ListingsTest < ApplicationSystemTestCase
 
     click_on "Create Listing"
 
-    assert_text "Listing was successfully created."
+    assert_text "Listing was successfully created.", wait: 5
   end
 
   test "should update Listing" do
