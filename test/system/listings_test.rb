@@ -25,6 +25,9 @@ class ListingsTest < ApplicationSystemTestCase
     visit mine_listings_url
     click_on "New listing"
 
+    # Wait for the new listing form to load
+    assert_selector "h1", text: "New Listing"
+
     fill_in "Title", with: "New Listing Title"
     fill_in "Description", with: "New listing description"
     fill_in "Price", with: "25.00"
