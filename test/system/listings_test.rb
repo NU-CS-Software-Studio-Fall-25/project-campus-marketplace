@@ -59,7 +59,8 @@ class ListingsTest < ApplicationSystemTestCase
   test "should destroy Listing" do
     sign_in_as(@user)
     visit mine_listings_url
-    accept_confirm do
+    
+    accept_confirm "Delete this listing? This action cannot be undone." do
       click_on "Delete", match: :first
     end
 
