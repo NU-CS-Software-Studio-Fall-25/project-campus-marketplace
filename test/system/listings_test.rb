@@ -83,9 +83,8 @@ class ListingsTest < ApplicationSystemTestCase
     sign_in_as(@user)
     visit listings_url
 
-    check "Furniture"
-    assert_selector "input#category_filter_furniture:checked"
-    page.execute_script("document.getElementById('category_filter_furniture').dispatchEvent(new Event('input', { bubbles: true }))")
+    find("label", text: "Furniture").click
+    assert_selector "input#category_filter_furniture:checked", wait: 1
 
     click_on "Search"
 
