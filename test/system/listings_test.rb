@@ -26,7 +26,7 @@ class ListingsTest < ApplicationSystemTestCase
     click_on "New listing"
 
     # Wait for the new listing form to load
-    assert_selector "h1", text: "New Listing"
+    assert_selector "h1", text: "Add a new item"
 
     fill_in "Title", with: "New Listing Title"
     fill_in "Description", with: "New listing description"
@@ -75,8 +75,8 @@ class ListingsTest < ApplicationSystemTestCase
 
     # Wait for the results area to update to avoid timing races in CI/headless
     within "#listings" do
-      assert_selector "div", text: "Calculus Textbook"
-      assert_no_selector "div", text: "MacBook Pro"
+      assert_text "Calculus Textbook"
+      assert_no_text "MacBook Pro"
     end
   end
 
