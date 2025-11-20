@@ -51,7 +51,7 @@ class ListingsTest < ApplicationSystemTestCase
     select "Furniture", from: "Category"
     click_on "Update Listing"
 
-    assert_no_text "Editing Listing"
+    assert_text "Listing was successfully updated."
     assert_text "Updated description"
   end
 
