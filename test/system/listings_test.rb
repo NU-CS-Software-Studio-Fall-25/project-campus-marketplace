@@ -107,10 +107,18 @@ class ListingsTest < ApplicationSystemTestCase
     sign_in_as(@user)
     visit listings_url
 
+    # Wait for filters to load
+    assert_selector "label", text: "Over $100"
+    
     find("label", text: "Over $100").click
+    
+    # Give JavaScript time to update checkbox state
+    sleep 0.1
+    
     click_on "Search"
 
-    within "#listings" do
+    # Wait for filtered results
+    within "#listings", wait: 5 do
       assert_text "MacBook Pro"
       assert_no_text "Calculus Textbook"
     end
