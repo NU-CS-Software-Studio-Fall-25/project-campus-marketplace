@@ -66,10 +66,10 @@ class ListingsTest < ApplicationSystemTestCase
     # Click delete and handle the Turbo confirmation
     page.driver.browser.switch_to.alert.accept rescue nil
     click_on "Delete", match: :first
-    
+
     # Wait a moment for any confirmation dialog
     sleep 0.3
-    
+
     # Accept any confirmation that appears
     begin
       page.driver.browser.switch_to.alert.accept
