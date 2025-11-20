@@ -21,8 +21,9 @@ Users should be able to create an account, enter items along with description an
 - 4 views: show all listings, create new listing, show user's existing listings, show one listings
 - Buyers can place bids on listings; sellers receive email alerts for new offers and can accept, reject, or counter directly from their dashboard, which emails the buyer with the outcome.
 
+
 # Website:
-https://our-campus-marketplace-b756f79f9cee.herokuapp.com/
+https://new-campus-app-f068baeccf6f.herokuapp.com/
 
 ## Google Sign-In configuration
 
