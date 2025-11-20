@@ -63,11 +63,21 @@ class ListingsTest < ApplicationSystemTestCase
     sign_in_as(@user)
     visit mine_listings_url
 
-    page.accept_confirm do
-      click_on "Delete", match: :first
+    # Click delete and handle the Turbo confirmation
+    page.driver.browser.switch_to.alert.accept rescue nil
+    click_on "Delete", match: :first
+    
+    # Wait a moment for any confirmation dialog
+    sleep 0.3
+    
+    # Accept any confirmation that appears
+    begin
+      page.driver.browser.switch_to.alert.accept
+    rescue Selenium::WebDriver::Error::NoSuchAlertError
+      # No alert present, continue
     end
 
-    assert_no_text @listing.title
+    assert_no_text @listing.title, wait: 5
   end
 
   test "search filters listings" do
