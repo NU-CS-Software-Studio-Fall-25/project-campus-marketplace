@@ -83,9 +83,9 @@ class ListingsTest < ApplicationSystemTestCase
 
     # Wait for the page and filters to be fully loaded
     assert_selector "input#category_filter_furniture"
-    
+
     find("label", text: "Furniture").click
-    
+
     # Give JavaScript time to update the checkbox state
     sleep 0.1
     assert_selector "input#category_filter_furniture:checked"
