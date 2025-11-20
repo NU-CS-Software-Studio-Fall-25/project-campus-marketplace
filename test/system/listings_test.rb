@@ -25,13 +25,11 @@ class ListingsTest < ApplicationSystemTestCase
     visit mine_listings_url
     click_on "New listing"
 
-    within("form[action='#{listings_path}']") do
-      fill_in "Title", with: "New Listing Title"
-      fill_in "Description", with: "New listing description"
-      fill_in "Price", with: "25.00"
-      select "Electronics", from: "Category"
-      attach_file "Image", file_fixture("placeholder.png")
-    end
+    fill_in "Title", with: "New Listing Title"
+    fill_in "Description", with: "New listing description"
+    fill_in "Price", with: "25.00"
+    select "Electronics", from: "Category"
+    attach_file "Image", file_fixture("placeholder.png")
 
     click_on "Create Listing"
 
