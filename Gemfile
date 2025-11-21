@@ -36,7 +36,7 @@ gem "tzinfo-data", platforms: %i[ mingw x64_mingw mswin jruby ]
 gem "bootsnap", require: false
 
 # Use Amazon S3 for Active Storage uploads
-gem "aws-sdk-s3", "~> 1.150", require: false
+gem "aws-sdk-s3", "~> 1.205", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
