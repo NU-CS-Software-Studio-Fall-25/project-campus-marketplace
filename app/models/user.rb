@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :listings, dependent: :destroy
   has_many :favorites, dependent: :destroy
   has_many :liked_listings, through: :favorites, source: :listing
+  has_many :hidden_listings, dependent: :destroy
   has_many :bids_as_buyer, class_name: "Bid", foreign_key: :buyer_id, dependent: :destroy
   has_many :received_bids, through: :listings, source: :bids
 
@@ -41,6 +42,12 @@ PASSWORD_REQUIREMENT_CHECKS = {
 
   def liked?(listing)
     favorites.exists?(listing_id: listing.id)
+  end
+
+  def hiding?(listing)
+    return false if listing.blank?
+
+    hidden_listings.exists?(listing_id: listing.id)
   end
 
   def validate_password?

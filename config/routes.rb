@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       patch :counter
     end
   end
+  resources :hidden_listings, only: %i[ create destroy ], param: :listing_id
   resources :favorites, only: %i[ index create destroy ], param: :listing_id
   resource :profile, only: %i[ show update ]
   # Allow full CRUD for users so system tests and app pages can access index/show/edit/update/destroy

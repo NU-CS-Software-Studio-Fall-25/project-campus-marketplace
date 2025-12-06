@@ -83,9 +83,16 @@
         </div>
 
         <div>
-          <div class="<%= [ "mb-2", @pagy.count.positive? ? nil : "hidden" ].compact.join(" ") %>"
-               data-listings-search-target="summary">
-            <%= render partial: "listings/summary", locals: { pagy: @pagy } %>
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="<%= [ "mb-2 sm:mb-0", @pagy.count.positive? ? nil : "hidden" ].compact.join(" ") %>"
+                 data-listings-search-target="summary">
+              <%= render partial: "listings/summary", locals: { pagy: @pagy } %>
+            </div>
+
+            <div class="<%= [ "flex justify-center sm:justify-end", @pagy.pages > 1 ? nil : "hidden" ].compact.join(" ") %>"
+                 data-listings-search-target="pagination">
+              <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+            </div>
           </div>
 
           <div id="listings"

@@ -114,8 +114,14 @@ export default class extends Controller {
   }
 
   updatePagination(pagination) {
-    this.paginationTarget.innerHTML = pagination
-    this.paginationTarget.classList.toggle("hidden", !pagination.trim())
+    if (!this.hasPaginationTarget) return
+
+    const hasPagination = Boolean(pagination && pagination.trim().length)
+
+    this.paginationTargets.forEach((target) => {
+      target.innerHTML = pagination
+      target.classList.toggle("hidden", !hasPagination)
+    })
   }
 
   abortResultsRequest() {

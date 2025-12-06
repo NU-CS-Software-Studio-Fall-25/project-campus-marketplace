@@ -208,6 +208,10 @@ class ListingsController < ApplicationController
 
     def listings_scope(query, categories, price_ranges)
       scope = Listing.includes(:user)
+      if Current.user
+        hidden_listing_ids = Current.user.hidden_listings.select(:listing_id)
+        scope = scope.where.not(id: hidden_listing_ids)
+      end
       scope = scope.where(category: categories) if categories.present?
       scope = apply_price_filter(scope, price_ranges)
 

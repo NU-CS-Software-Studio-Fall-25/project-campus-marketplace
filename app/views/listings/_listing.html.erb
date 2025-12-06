@@ -47,6 +47,9 @@
         <% end %>
       </div>
       <div class="flex items-center gap-3">
+        <% if authenticated? && listing.user != current_user %>
+          <%= render "hidden_listings/toggle", listing: listing %>
+        <% end %>
         <%= render "favorites/toggle", listing: listing %>
         <% if listing.user == current_user %>
           <%= link_to 'Delete',
