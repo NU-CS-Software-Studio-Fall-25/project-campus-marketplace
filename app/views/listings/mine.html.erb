@@ -4,6 +4,8 @@
   <h1 class="text-3xl font-bold text-gray-800">My Listings</h1>
   <%= link_to 'New listing',
               new_listing_path,
+              data: { turbo_frame: "_top" },
+              aria: { label: "Add a new listing" },
               class: "inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2" %>
 </div>
 
