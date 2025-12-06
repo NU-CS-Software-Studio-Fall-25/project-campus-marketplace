@@ -89,8 +89,8 @@ class ListingsTest < ApplicationSystemTestCase
 
     # Wait for the results area to update to avoid timing races in CI/headless
     within "#listings" do
-      assert_text "Calculus Textbook"
-      assert_no_text "MacBook Pro"
+      assert_text "Calculus Textbook", wait: 5
+      assert_no_text "MacBook Pro", wait: 5
     end
   end
 
