@@ -52,6 +52,7 @@
           <%= link_to 'Delete',
                       listing,
                       data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' },
+                      aria: { label: "Delete listing #{listing.title}" },
                       class: 'text-sm font-medium text-red-600 hover:text-red-800 bg-transparent border-0 p-0' %>
         <% end %>
       </div>

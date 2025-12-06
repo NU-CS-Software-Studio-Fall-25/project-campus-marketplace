@@ -12,6 +12,7 @@
       <% if liked %>
         <%= link_to favorite_path(listing),
                     data: { turbo_method: :delete, turbo_stream: true },
+                    aria: { label: "Remove like from #{listing.title}" },
                     class: "inline-flex items-center gap-2 rounded-md border border-blue-600 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 shadow-sm transition hover:bg-blue-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1" do %>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 text-blue-600">
             <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
@@ -21,6 +22,7 @@
       <% else %>
         <%= link_to favorites_path(listing_id: listing.id),
                     data: { turbo_method: :post, turbo_stream: true },
+                    aria: { label: "Like #{listing.title}" },
                     class: "inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1" do %>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" class="h-5 w-5 text-gray-500">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" />
