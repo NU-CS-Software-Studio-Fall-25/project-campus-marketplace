@@ -3,6 +3,9 @@
     <p class="text-xs font-semibold uppercase tracking-wide text-indigo-600">Offers</p>
     <h2 class="text-lg font-semibold text-gray-900">Make an offer</h2>
     <p class="text-sm text-gray-500">Send a bid and the seller will respond via email.</p>
+    <p class="mt-2 text-xs text-gray-500 leading-relaxed">
+      Prefer meeting in a well-lit public spot on campus (library entrance, student center), and finalize payment in person. Bring a friend if you can, avoid advance payments, and use a trusted method (cash/Venmo) once you’ve inspected the item.
+    </p>
   </div>
 
   <% if existing_bid %>
@@ -46,7 +49,7 @@
       <%= form.label :message, "Message (optional)", class: "block text-xs font-semibold text-gray-600 uppercase tracking-wide" %>
       <%= form.text_area :message,
                          rows: 3,
-                         placeholder: "Share pickup timing, bundle ideas, etc.",
+                         placeholder: "Suggest a safe campus meetup spot (e.g., library entrance), time, and your preferred payment method after inspection.",
                          class: "mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500" %>
     </div>
 
