@@ -11,32 +11,34 @@
   <div class="mt-6 grid max-w-6xl mx-auto grid-cols-1 gap-16 xl:gap-20 sm:grid-cols-2 xl:grid-cols-3">
     <% @listings.each do |listing| %>
       <div class="bg-white rounded-2xl shadow-md ring-1 ring-gray-100 overflow-hidden transition-shadow duration-300 ease-in-out hover:shadow-xl">
-        <div class="h-48 overflow-hidden bg-gray-100">
-          <% if defined?(ActiveStorage) && listing.respond_to?(:image) && listing.image.respond_to?(:attached?) && listing.image.attached? %>
-            <%= image_tag listing.image.variant(resize_to_fill: [ 600, 400 ]),
-                          alt: listing.title,
-                          class: "w-full h-full object-cover" %>
-          <% elsif listing.respond_to?(:image_url) && listing.image_url.present? %>
-            <%= image_tag listing.image_url,
-                          alt: listing.title,
-                          class: "w-full h-full object-cover" %>
-          <% else %>
-            <div class="w-full h-full bg-gray-200 flex items-center justify-center">
-              <svg class="text-gray-400" role="img" aria-label="No image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="80" height="80" focusable="false">
-                <path fill="currentColor" d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7zm5 2l2.5 3 1.5-2L15 15H5l3-6z"/>
-              </svg>
-            </div>
-          <% end %>
-        </div>
-
-        <div class="p-6 space-y-4">
-          <div class="flex items-start justify-between gap-4">
-            <h2 class="text-xl font-semibold text-gray-900 leading-tight"><%= listing.title %></h2>
-            <div class="text-lg font-bold text-green-600 whitespace-nowrap"><%= number_to_currency(listing.price || 0) %></div>
+        <%= link_to listing_path(listing), class: "block hover:no-underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500" do %>
+          <div class="h-48 overflow-hidden bg-gray-100">
+            <% if defined?(ActiveStorage) && listing.respond_to?(:image) && listing.image.respond_to?(:attached?) && listing.image.attached? %>
+              <%= image_tag listing.image.variant(resize_to_fill: [ 600, 400 ]),
+                            alt: listing.title,
+                            class: "w-full h-full object-cover" %>
+            <% elsif listing.respond_to?(:image_url) && listing.image_url.present? %>
+              <%= image_tag listing.image_url,
+                            alt: listing.title,
+                            class: "w-full h-full object-cover" %>
+            <% else %>
+              <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                <svg class="text-gray-400" role="img" aria-label="No image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="80" height="80" focusable="false">
+                  <path fill="currentColor" d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7zm5 2l2.5 3 1.5-2L15 15H5l3-6z"/>
+                </svg>
+              </div>
+            <% end %>
           </div>
 
-          <p class="text-sm text-gray-600 leading-relaxed h-16 overflow-hidden"><%= truncate(listing.description, length: 140) %></p>
-        </div>
+          <div class="p-6 space-y-4">
+            <div class="flex items-start justify-between gap-4">
+              <h2 class="text-xl font-semibold text-gray-900 leading-tight"><%= listing.title %></h2>
+              <div class="text-lg font-bold text-green-600 whitespace-nowrap"><%= number_to_currency(listing.price || 0) %></div>
+            </div>
+
+            <p class="text-sm text-gray-600 leading-relaxed h-16 overflow-hidden"><%= truncate(listing.description, length: 140) %></p>
+          </div>
+        <% end %>
 
         <div class="px-6 pb-6">
           <div class="flex flex-wrap items-center gap-3">
