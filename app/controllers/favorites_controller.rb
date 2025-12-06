@@ -7,13 +7,23 @@ class FavoritesController < ApplicationController
 
   def create
     current_user.favorites.find_or_create_by!(listing: @listing)
-    redirect_back fallback_location: listings_path, notice: "Saved to likes."
+    @listing.reload
+    flash.now[:notice] = "Saved to likes."
+    respond_to do |format|
+      format.html { redirect_back fallback_location: listings_path, notice: "Saved to likes." }
+      format.turbo_stream
+    end
   end
 
   def destroy
     favorite = current_user.favorites.find_by(listing: @listing)
     favorite&.destroy!
-    redirect_back fallback_location: listings_path, notice: "Removed from likes."
+    @listing.reload
+    flash.now[:notice] = "Removed from likes."
+    respond_to do |format|
+      format.html { redirect_back fallback_location: listings_path, notice: "Removed from likes." }
+      format.turbo_stream
+    end
   end
 
   private

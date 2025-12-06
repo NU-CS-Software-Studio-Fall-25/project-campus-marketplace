@@ -29,3 +29,22 @@ if ("serviceWorker" in navigator) {
     })
   }
 }
+
+const dismissFlashMessages = () => {
+  const messages = document.querySelectorAll(".flash-message")
+
+  messages.forEach((message) => {
+    const timeout = Number(message.dataset.flashTimeout || 4000)
+
+    setTimeout(() => {
+      message.classList.add("opacity-0", "transition-opacity", "duration-500")
+      setTimeout(() => message.remove(), 500)
+    }, timeout)
+  })
+}
+
+document.addEventListener("turbo:load", dismissFlashMessages)
+document.addEventListener("turbo:render", dismissFlashMessages)
+document.addEventListener("turbo:before-stream-render", () => {
+  requestAnimationFrame(dismissFlashMessages)
+})

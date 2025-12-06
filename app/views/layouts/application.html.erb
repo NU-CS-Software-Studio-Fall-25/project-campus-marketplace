@@ -59,12 +59,9 @@
       </nav>
 
       <main class="container mx-auto px-4 py-8 flex-1" id="main-content">
-        <% flash.each do |key, message| %>
-          <% alert_class = key == 'notice' ? 'bg-green-100 border-green-500 text-green-700' : 'bg-red-100 border-red-500 text-red-700' %>
-          <div class="<%= alert_class %> border-l-4 p-4 mb-4" role="alert">
-            <p><%= message %></p>
-          </div>
-        <% end %>
+        <div id="flash-messages">
+          <%= render "shared/flash" %>
+        </div>
 
         <%= yield %>
       </main>

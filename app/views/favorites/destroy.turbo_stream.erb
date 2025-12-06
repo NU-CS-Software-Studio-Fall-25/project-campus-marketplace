@@ -1,0 +1,6 @@
+<%= turbo_stream.replace dom_id(@listing, :favorite),
+                         partial: "favorites/toggle",
+                         locals: { listing: @listing } %>
+
+<%= turbo_stream.update "flash-messages",
+                        partial: "shared/flash" %>
