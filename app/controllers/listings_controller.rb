@@ -72,7 +72,7 @@ class ListingsController < ApplicationController
     pagy_params[:q] = @query if @query.present?
     pagy_params[:categories] = @selected_categories if @selected_categories.present?
     pagy_params[:price_ranges] = @selected_price_ranges if @selected_price_ranges.present?
-    @pagy, @listings = pagy(@listings.order(created_at: :desc), items: 12, params: pagy_params)
+    @pagy, @listings = pagy(@listings.order(created_at: :desc), items: 24, params: pagy_params)
 
     respond_to do |format|
       format.html
@@ -94,7 +94,7 @@ class ListingsController < ApplicationController
     pagy_params[:q] = query if query.present?
     pagy_params[:categories] = selected_categories if selected_categories.present?
     pagy_params[:price_ranges] = selected_price_ranges if selected_price_ranges.present?
-    pagy, listings = pagy(listings.order(created_at: :desc), items: 12, params: pagy_params)
+    pagy, listings = pagy(listings.order(created_at: :desc), items: 24, params: pagy_params)
 
     pagination_html = pagy.pages > 1 ? view_context.pagy_nav(pagy) : ""
     summary_html = render_to_string(partial: "listings/summary", locals: { pagy: pagy }, formats: [ :html ])
