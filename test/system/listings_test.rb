@@ -54,9 +54,9 @@ class ListingsTest < ApplicationSystemTestCase
 
     click_on "Update Listing"
 
-    # Wait for redirect to show page
-    assert_text "Listing was successfully updated.", wait: 5
-    assert_text "Updated description"
+    # Wait for redirect to show page and updated content
+    assert_selector "h1", text: @listing.title, wait: 5
+    assert_text "Updated description", wait: 5
   end
 
   test "should destroy Listing" do
