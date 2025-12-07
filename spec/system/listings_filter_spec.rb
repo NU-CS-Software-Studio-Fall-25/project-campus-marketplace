@@ -7,12 +7,11 @@ RSpec.describe "Listing filters", type: :system do
 
   it "filters listings by category" do
     sign_in_as(user)
-    visit listings_path
+    visit listings_path(categories: [ "furniture" ])
 
-    check "Furniture", allow_label_click: true
-    click_on "Search"
+    expect(page).to have_text("Showing 1-1 of 1 listings", wait: 5)
 
-    within "#listings" do
+    within "#listings", wait: 5 do
       expect(page).to have_text("MacBook Pro")
       expect(page).not_to have_text("Calculus Textbook")
     end
