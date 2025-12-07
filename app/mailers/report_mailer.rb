@@ -21,4 +21,15 @@ class ReportMailer < ApplicationMailer
       subject: "[Campus Marketplace] Your listing was reported"
     )
   end
+
+  def listing_removed_for_safety(listing, user, reason)
+    @listing = listing
+    @user = user
+    @reason = reason
+
+    mail(
+      to: user.email_address,
+      subject: "[Campus Marketplace] Your listing was removed for safety reasons"
+    )
+  end
 end

@@ -20,6 +20,7 @@ class Listing < ApplicationRecord
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 10000000 }
   validates :category, inclusion: { in: categories.keys }
   validate :image_requirements
+  validate :content_safety_check
 
   private
     def image_requirements
@@ -34,6 +35,24 @@ class Listing < ApplicationRecord
 
       if image.byte_size > 5.megabytes
         errors.add(:image, "must be smaller than 5MB")
+      end
+    end
+
+    def content_safety_check
+      # Only run safety check if content safety is enabled
+      return unless Rails.application.config.respond_to?(:content_safety_enabled) &&
+                    Rails.application.config.content_safety_enabled
+
+      # Skip check if listing is not new and hasn't changed
+      return unless new_record? || title_changed? || description_changed? || image.attached?
+
+      safety_service = ContentSafetyService.new(self)
+      result = safety_service.check_safety
+
+      unless result[:safe]
+        errors.add(:base, "This listing cannot be published: #{result[:reason]}. " \
+                          "Please ensure your listing does not contain prohibited items " \
+                          "(drugs, alcohol, weapons, etc.)")
       end
     end
 end
