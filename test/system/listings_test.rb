@@ -120,10 +120,8 @@ class ListingsTest < ApplicationSystemTestCase
     # Wait for filters to load
     assert_selector "label", text: "Over $100"
 
-    find("label", text: "Over $100").click
-
-    # Give JavaScript time to update checkbox state
-    sleep 0.1
+    check "Over $100", allow_label_click: true
+    assert_checked_field "Over $100"
 
     click_on "Search"
 
