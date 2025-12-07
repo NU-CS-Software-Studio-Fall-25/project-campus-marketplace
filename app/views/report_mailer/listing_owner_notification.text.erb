@@ -1,0 +1,10 @@
+Your listing was reported.
+
+Listing: <%= @listing.title %> (ID: <%= @listing.id %>)
+Reason: <%= @report.reason %>
+Details:
+<%= @report.details.presence || "N/A" %>
+
+Please review your listing and update or remove it if needed. If you believe this was in error, you can reply to this email.
+
+Listing link: <%= listing_url(@listing) %>

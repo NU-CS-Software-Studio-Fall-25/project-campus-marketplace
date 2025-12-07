@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_06_180000) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_18_100000) do
   create_schema "_heroku"
 
   # These are extensions that must be enabled in order to support this database
@@ -92,6 +92,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_06_180000) do
     t.integer "favorites_count", default: 0, null: false
   end
 
+  create_table "reports", force: :cascade do |t|
+    t.bigint "listing_id", null: false
+    t.bigint "reporter_id", null: false
+    t.string "reason", null: false
+    t.text "details"
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["listing_id", "reporter_id"], name: "index_reports_on_listing_id_and_reporter_id", unique: true
+    t.index ["listing_id"], name: "index_reports_on_listing_id"
+    t.index ["reporter_id"], name: "index_reports_on_reporter_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "ip_address"
@@ -119,12 +132,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_06_180000) do
     t.string "google_token"
     t.string "google_refresh_token"
     t.datetime "google_token_expires_at"
-    t.datetime "terms_accepted_at"
     t.index ["confirmation_token_digest"], name: "index_users_on_confirmation_token_digest"
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
     t.index ["google_uid"], name: "index_users_on_google_uid", unique: true
     t.index ["reset_password_digest"], name: "index_users_on_reset_password_digest"
-    t.index ["terms_accepted_at"], name: "index_users_on_terms_accepted_at"
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
@@ -136,5 +147,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_06_180000) do
   add_foreign_key "favorites", "users"
   add_foreign_key "hidden_listings", "listings"
   add_foreign_key "hidden_listings", "users"
+  add_foreign_key "reports", "listings"
+  add_foreign_key "reports", "users", column: "reporter_id"
   add_foreign_key "sessions", "users"
 end

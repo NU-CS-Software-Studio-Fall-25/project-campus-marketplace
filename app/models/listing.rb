@@ -6,6 +6,7 @@ class Listing < ApplicationRecord
   has_many :favorited_by, through: :favorites, source: :user
   has_many :bids, dependent: :destroy
   has_many :hidden_listings, dependent: :destroy
+  has_many :reports, dependent: :destroy
 
   enum :category, {
     electronics: "electronics",

@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many :hidden_listings, dependent: :destroy
   has_many :bids_as_buyer, class_name: "Bid", foreign_key: :buyer_id, dependent: :destroy
   has_many :received_bids, through: :listings, source: :bids
+  has_many :reports, foreign_key: :reporter_id, dependent: :destroy
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
   normalizes :username, with: ->(name) { name.strip.downcase }

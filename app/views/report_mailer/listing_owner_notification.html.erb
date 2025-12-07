@@ -1,0 +1,10 @@
+<h1>Your listing was reported</h1>
+
+<p>Listing: <strong><%= @listing.title %></strong> (ID: <%= @listing.id %>)</p>
+<p>Reason: <%= @report.reason %></p>
+<p>Details:</p>
+<p><%= simple_format(@report.details.presence || "N/A") %></p>
+
+<p>Please review your listing and update or remove it if needed. If you believe this was in error, you can reply to this email.</p>
+
+<p>Listing link: <%= link_to listing_url(@listing), listing_url(@listing) %></p>

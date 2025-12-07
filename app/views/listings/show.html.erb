@@ -44,6 +44,9 @@
             <%= render "hidden_listings/toggle", listing: @listing %>
           <% end %>
           <%= render "favorites/toggle", listing: @listing %>
+          <% if authenticated? && current_user != @listing.user %>
+            <%= render "listings/report_form", listing: @listing %>
+          <% end %>
         </div>
 
         <div class="prose prose-sm max-w-none text-gray-700">
