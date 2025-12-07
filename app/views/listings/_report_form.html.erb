@@ -1,0 +1,43 @@
+<details class="group rounded-xl border border-red-100 bg-red-50 p-4">
+  <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-red-700">
+    <span>Report this listing</span>
+    <svg class="h-4 w-4 transition group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </summary>
+
+  <div class="mt-3 space-y-3 text-sm text-gray-800">
+    <p class="text-red-800">Flag inappropriate or unsafe content. Reports are reviewed by the marketplace team.</p>
+
+    <%= form_with url: listing_reports_path(listing), scope: :report, class: "space-y-3" do |form| %>
+      <div>
+        <%= form.label :reason, "Reason", class: "block text-xs font-semibold uppercase tracking-wide text-red-800" %>
+        <%= form.select :reason,
+                        [
+                          "Spam or scam",
+                          "Inappropriate content",
+                          "Safety concern",
+                          "Wrong category / misleading",
+                          "Other"
+                        ],
+                        { prompt: "Select a reason" },
+                        class: "mt-1 w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-red-500 focus:ring-red-500" %>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between">
+          <%= form.label :details, "Details (optional)", class: "block text-xs font-semibold uppercase tracking-wide text-red-800" %>
+          <span class="text-[11px] text-red-600">Listing will be hidden for you after submitting</span>
+        </div>
+        <%= form.text_area :details,
+                           rows: 3,
+                           placeholder: "Add context that helps us review quickly",
+                           class: "mt-1 w-full rounded-md border-gray-300 text-sm shadow-sm focus:border-red-500 focus:ring-red-500" %>
+      </div>
+
+      <div class="flex items-center justify-end">
+        <%= form.submit "Submit report", class: "inline-flex items-center rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1" %>
+      </div>
+    <% end %>
+  </div>
+</details>

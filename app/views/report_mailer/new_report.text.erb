@@ -1,0 +1,9 @@
+New Listing Report
+
+Listing: <%= @listing.title %> (ID: <%= @listing.id %>)
+Reported by: <%= @reporter.full_name.presence || @reporter.username %> (<%= @reporter.email_address %>)
+Reason: <%= @report.reason %>
+Details:
+<%= @report.details.presence || "N/A" %>
+
+Link: <%= listing_url(@listing) %>

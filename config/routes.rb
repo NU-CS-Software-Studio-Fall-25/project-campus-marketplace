@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       post :generate_description
     end
     resources :bids, only: :create
+    resources :reports, only: :create, module: :listings
   end
   resources :bids, only: [] do
     member do
