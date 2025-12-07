@@ -9,7 +9,7 @@ require_relative "spec_helper"
 Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
 RSpec.configure do |config|
-  config.fixture_path = "#{::Rails.root}/test/fixtures"
+  config.fixture_paths = [ "#{::Rails.root}/test/fixtures" ]
   config.use_transactional_fixtures = true
 
   config.infer_spec_type_from_file_location!
