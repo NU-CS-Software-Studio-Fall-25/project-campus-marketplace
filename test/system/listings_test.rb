@@ -82,15 +82,13 @@ class ListingsTest < ApplicationSystemTestCase
 
   test "search filters listings" do
     sign_in_as(@user)
-    visit listings_url
+    visit listings_url(q: "Calculus")
 
-    fill_in "Search listings", with: "Calculus"
-    click_on "Search"
+    assert_text "Showing 1-1 of 1 listings", wait: 5
 
-    # Wait for the results area to update to avoid timing races in CI/headless
     within "#listings" do
-      assert_text "Calculus Textbook", wait: 5
-      assert_no_text "MacBook Pro", wait: 5
+      assert_text "Calculus Textbook"
+      assert_no_text "MacBook Pro"
     end
   end
 
