@@ -17,11 +17,15 @@ class BidsController < ApplicationController
   def accept
     respond_to_bid!(:accepted, response_message: params.dig(:bid, :response_message))
     redirect_to listing_path(@bid.listing), notice: "You accepted the offer."
+  rescue ActiveRecord::RecordInvalid => e
+    handle_bid_error(e)
   end
 
   def reject
     respond_to_bid!(:rejected, response_message: params.dig(:bid, :response_message))
     redirect_to listing_path(@bid.listing), notice: "You rejected the offer."
+  rescue ActiveRecord::RecordInvalid => e
+    handle_bid_error(e)
   end
 
   def counter
@@ -41,6 +45,8 @@ class BidsController < ApplicationController
     redirect_to listing_path(@bid.listing), notice: "Counter offer sent."
   rescue ArgumentError => e
     redirect_to listing_path(@bid.listing), alert: e.message
+  rescue ActiveRecord::RecordInvalid => e
+    handle_bid_error(e)
   end
 
   private
@@ -74,5 +80,9 @@ class BidsController < ApplicationController
       )
 
       BidMailer.with(bid: @bid).bid_response_notification.deliver_later
+    end
+
+    def handle_bid_error(error)
+      redirect_to listing_path(@bid.listing), alert: error.record.errors.full_messages.to_sentence
     end
 end

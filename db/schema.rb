@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_17_120000) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_06_180000) do
   create_schema "_heroku"
 
   # These are extensions that must be enabled in order to support this database
@@ -71,6 +71,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_120000) do
     t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
+  create_table "hidden_listings", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "listing_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["listing_id"], name: "index_hidden_listings_on_listing_id"
+    t.index ["user_id", "listing_id"], name: "index_hidden_listings_on_user_id_and_listing_id", unique: true
+    t.index ["user_id"], name: "index_hidden_listings_on_user_id"
+  end
+
   create_table "listings", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -109,10 +119,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_120000) do
     t.string "google_token"
     t.string "google_refresh_token"
     t.datetime "google_token_expires_at"
+    t.datetime "terms_accepted_at"
     t.index ["confirmation_token_digest"], name: "index_users_on_confirmation_token_digest"
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
     t.index ["google_uid"], name: "index_users_on_google_uid", unique: true
     t.index ["reset_password_digest"], name: "index_users_on_reset_password_digest"
+    t.index ["terms_accepted_at"], name: "index_users_on_terms_accepted_at"
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
@@ -122,5 +134,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_120000) do
   add_foreign_key "bids", "users", column: "buyer_id"
   add_foreign_key "favorites", "listings"
   add_foreign_key "favorites", "users"
+  add_foreign_key "hidden_listings", "listings"
+  add_foreign_key "hidden_listings", "users"
   add_foreign_key "sessions", "users"
 end

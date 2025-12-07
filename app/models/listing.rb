@@ -14,8 +14,8 @@ class Listing < ApplicationRecord
     other: "other"
   }
 
-  validates :title, presence: true, length: { maximum: 50 }
-  validates :description, presence: true, length: { maximum: 1000 }
+  validates :title, presence: true, length: { maximum: 50 }, profanity: true
+  validates :description, presence: true, length: { maximum: 1000 }, profanity: true
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 10000000 }
   validates :category, inclusion: { in: categories.keys }
   validate :image_requirements

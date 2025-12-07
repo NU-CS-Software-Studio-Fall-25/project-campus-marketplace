@@ -5,6 +5,8 @@ class Bid < ApplicationRecord
   belongs_to :buyer, class_name: "User"
 
   validates :amount, presence: true, numericality: { greater_than: 0 }
+  validates :message, profanity: { allow_blank: true }
+  validates :response_message, profanity: { allow_blank: true }
   validate :buyer_is_not_owner
 
   scope :recent_first, -> { order(created_at: :desc) }

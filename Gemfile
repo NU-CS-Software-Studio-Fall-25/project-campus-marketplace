@@ -78,3 +78,5 @@ group :test do
   gem "database_cleaner-active_record", "~> 2.0"
   gem "rspec-expectations"
 end
+
+gem "obscenity", "~> 1.0"
