@@ -55,7 +55,7 @@ class ContentSafetyService
   def check_text_content
     # First check for obvious prohibited keywords
     content = "#{@listing.title} #{@listing.description}".downcase
-    
+
     prohibited_match = PROHIBITED_KEYWORDS.find do |keyword|
       content.include?(keyword.downcase)
     end
@@ -89,14 +89,14 @@ class ContentSafetyService
               {
                 type: "text",
                 text: <<~PROMPT.squish
-                  You are a content moderator for a college campus marketplace. 
+                  You are a content moderator for a college campus marketplace.
                   Analyze this image and determine if it contains any prohibited items:
                   - Drugs or controlled substances (marijuana, pills, paraphernalia, etc.)
                   - Alcohol or alcoholic beverages
                   - Weapons (guns, knives, ammunition, etc.)
                   - Counterfeit or stolen goods
                   - Any other items that would be inappropriate for a campus marketplace
-                  
+
                   Respond ONLY with JSON: {"safe":true/false,"reason":"explanation if unsafe"}
                 PROMPT
               },
@@ -124,9 +124,9 @@ class ContentSafetyService
     return safe_result unless openai_api_key.present?
 
     client = OpenAI::Client.new(access_token: openai_api_key)
-    
+
     text = "#{@listing.title}\n#{@listing.description}"
-    
+
     response = client.moderations(
       parameters: {
         input: text
@@ -150,7 +150,7 @@ class ContentSafetyService
   def parse_image_response(content)
     cleaned = extract_json_from_response(content)
     data = JSON.parse(cleaned)
-    
+
     if data["safe"] == false
       unsafe_result(data["reason"] || "Image contains prohibited content")
     else
@@ -178,7 +178,7 @@ class ContentSafetyService
     # If either check fails, the listing is unsafe
     return text_result unless text_result[:safe]
     return image_result if image_result.present? && !image_result[:safe]
-    
+
     safe_result
   end
 
