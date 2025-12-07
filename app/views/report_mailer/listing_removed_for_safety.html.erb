@@ -1,0 +1,27 @@
+<h1>Your listing was automatically removed</h1>
+
+<p>Hello <%= @user.full_name.presence || @user.username %>,</p>
+
+<p>We're writing to let you know that your listing <strong><%= @listing.title %></strong> has been automatically removed from the Campus Marketplace for safety reasons.</p>
+
+<h2>Why was this removed?</h2>
+<p><%= @reason %></p>
+
+<h2>Our Policy</h2>
+<p>The Campus Marketplace prohibits listings for:</p>
+<ul>
+  <li>Drugs and controlled substances</li>
+  <li>Alcohol and alcoholic beverages</li>
+  <li>Weapons and ammunition</li>
+  <li>Counterfeit or stolen goods</li>
+  <li>Other items that violate campus policies</li>
+</ul>
+
+<p>If you believe this was a mistake, please reply to this email with an explanation and we'll review your case.</p>
+
+<p>Thank you for helping us maintain a safe marketplace for our campus community.</p>
+
+<p>
+  Best regards,<br>
+  Campus Marketplace Team
+</p>

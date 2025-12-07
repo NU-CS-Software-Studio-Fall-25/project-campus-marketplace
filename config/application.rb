@@ -23,5 +23,13 @@ module MarketplaceApp
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # AI Image Description Feature
+    config.ai_description_enabled = ENV.fetch("AI_DESCRIPTION_ENABLED", "true") == "true"
+    config.ai_description_rate_limit = ENV.fetch("AI_DESCRIPTION_RATE_LIMIT", "50").to_i
+    config.ai_description_cache_duration = ENV.fetch("AI_DESCRIPTION_CACHE_DURATION", "7").to_i.days
+
+    # Content Safety Feature
+    config.content_safety_enabled = ENV.fetch("CONTENT_SAFETY_ENABLED", "true") == "true"
   end
 end
