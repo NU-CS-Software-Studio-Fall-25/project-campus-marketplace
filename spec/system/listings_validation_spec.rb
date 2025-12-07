@@ -16,6 +16,8 @@ RSpec.describe "Listing validations", type: :system do
 
     click_button "Create Listing"
 
-    expect(page).to have_content("Image must be attached", wait: 5)
+    # Should stay on the form page and not create the listing
+    expect(page).to have_current_path(new_listing_path, wait: 5)
+    expect(Listing.where(title: "Campus Bike").exists?).to be false
   end
 end
