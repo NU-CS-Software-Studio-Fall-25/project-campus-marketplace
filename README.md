@@ -23,7 +23,7 @@ Users should be able to create an account, enter items along with description an
 
 
 # Website:
-[https://new-campus-app-f068baeccf6f.herokuapp.com/](https://northwestern-project-7264569948bb.herokuapp.com/)
+https://northwestern-project-7264569948bb.herokuapp.com/
 
 ## Google Sign-In configuration
 
@@ -35,4 +35,5 @@ Enable Google authentication by adding the following environment variables (for 
 - `GOOGLE_ALLOWED_EMAIL_DOMAINS` (comma-separated list, e.g. `u.northwestern.edu,northwestern.edu`; defaults to `u.northwestern.edu`)
 
 After configuring these values, restart the Rails server. Users can then click **Continue with Google** on the sign-in screen to link an existing account or create a new one automatically.
+
 
