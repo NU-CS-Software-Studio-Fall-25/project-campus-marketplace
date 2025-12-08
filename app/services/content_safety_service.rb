@@ -57,7 +57,8 @@ class ContentSafetyService
     content = "#{@listing.title} #{@listing.description}".downcase
 
     prohibited_match = PROHIBITED_KEYWORDS.find do |keyword|
-      content.include?(keyword.downcase)
+      pattern = /\b#{Regexp.escape(keyword)}\b/i
+      content.match?(pattern)
     end
 
     if prohibited_match
