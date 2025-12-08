@@ -77,7 +77,7 @@ group :test do
   gem "faker"
   gem "database_cleaner-active_record", "~> 2.0"
   gem "rspec-expectations"
-  gem "rspec-rails", "~> 7.1"
+  gem "rspec-rails", "~> 8.0"
 end
 
 gem "obscenity", "~> 1.0"
